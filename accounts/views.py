@@ -102,6 +102,7 @@ def myinfo(request, username):
     ctx = {
         'profile': get_object_or_404(Profile, user__username=username),
         'team_list': team_list,
+        'leader': request.user.profile.member_set.filter(leader=True).exists(),
     }
     return render(request, 'myinfo.html', ctx)
 
