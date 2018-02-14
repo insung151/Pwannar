@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<meta charset="utf-8">
+<title>대회정보 게시판</title>
+
+<div>
+    <div style="padding: 80px 0 30px 0; margin-bottom: 50px;">
+        <h5 style="text-align: center; color: #9fc3e0;">{{ article.title }}</h5>
+        <div style="text-align: right;
+                    margin-top: 30px;
+                    margin-right: 10px;
+                    font-size: 12px;">
+            <span>{{ article.created_at|date:"Y.m.d h:i A" }}</span><br />
+
+        </div>
+    </div>
+    <div img src = "{{ detail.image_url }}">
+        <p>제목: {{ detail.title }}</p>
+        <p>글쓴이: {{ detail.author }}</p>
+        <p>모집마감일: {{ detail.due }}</p>
+        <p>모집인원: {{ detail.personnel }}</p>
+        <p>설명: {{ detail.explanation }}</p>
+        <p>작성날짜: {{ detail.created_at }}</p>
+        <p>최종수정날짜: {{ detail.updated_at }}</p>
+    </div>
+
+    <div id="like_button_wrapper">
+    <form action="{% url 'InformationBoard:inform_list' %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn {% if like_article %}liked{% endif %}">좋아요 {{ article.like_set.count }}
+        </button>
+    </form>
+    </div>
+
+    <a href="{% url 'InformationBoard:inform_list' %}" class="waves-effect waves-light btn">목록으로</a>
+
+    <div style="float: right;">
+        <a href="{% url 'InformationBoard:inform_list' %}" class="waves-effect waves-light btn">수정</a>
+        <form id='article_delete_form' action="{% url 'InformationBoard:inform_list' %}" method="POST" style="display: inline-block;">
+            {% csrf_token %}
+            <button type="submit" class="waves-effect waves-light btn">삭제</button>
+        </form>
+        <script>
+            $('#article_delete_form').submit(function(e){
+                if (!confirm('지우시겠습니까?')) {
+                    e.preventDefault();
+                }
+            });
+        </script>
+    </div>
+
+    <div class="comment_area">
+        <h4>댓글</h4>
+        <form method="POST">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <button type="submit" class="waves-effect waves-light btn">작성</button>
+        </form>
+        {% if article.comment_set.exists %}
+        <ul>
+            {% for comment in article.comment_set.all %}
+            <li style="margin: 30px 0;">
+                <div style="font-size: 17px; font-weight: bold;"> <a href="{% url 'InformationBoard:inform_list' %}">{{ comment.author }}</a></div>
+                <div style="margin: 10px 0;">
+                    <span>{{ comment.content }}</span>
+                    <span>{{ comment.created_at|date:"Y.m.d h:i A"}}
+                    </span>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

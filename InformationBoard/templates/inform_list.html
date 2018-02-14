@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="collection">
+    {% for article in inform_list %}
+    <a class="collection-item" id="article_{{ article.pk }}" href="{% url 'InformationBoard:inform_detail' article.pk %}">{{ article.title }}</a>
+
+    {% endfor %}
+</div>
+
+<a id="create_button" href="{% url 'InformationBoard:inform_create' %}" class="waves-effect waves-light btn">글쓰기</a>
+
+{% endblock %}

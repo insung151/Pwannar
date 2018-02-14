@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>{{ invite.sender }}님이 {{ invite.team.team_name }}으로 초대합니다.</h2>
+  <form method="post" action="{% url 'message:join' invite.pk %}">
+    <button type="submit">수락</button>
+  </form>
+{% endblock %}

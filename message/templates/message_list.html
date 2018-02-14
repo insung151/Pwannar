@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+  <table>
+    <thead>
+    <tr>
+      <th>보낸사람</th>
+      <th>제목</th>
+      <th>날짜</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for message in messages %}
+      <tr>
+        <td><a href="{% url 'accounts:myinfo' message.sender %}">{{ message.sender }}</a></td>
+        <td><a href="{% url 'message:message_detail' message.pk %}">{{ message.title }}</a></td>
+        <td>{{ message.send_time }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

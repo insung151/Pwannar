@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method = "POST">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type = "submit" style="display:block;">제출하기</button>
+</form>
+
+
+<script>
+  $(document).ready(function() {
+      $('select').material_select();
+      {#$('select[name="subregion"]').closest("div").children('ul').append('<li class=""><span><input type="checkbox"><label></label>강남구</span></li>');#}
+      {#$('select').material_select();#}
+  });
+
+$('.date_picker').pickadate({
+  selectMonths: true, // Creates a dropdown to control month
+  selectYears: 15, // Creates a dropdown of 15 years to control year,
+    today: 'Today',
+    clear: 'Clear',
+    close: 'Ok',
+    closeOnSelect: false, // Close upon selecting a date,
+    format:'yyyy-mm-dd'
+});
+
+  $('select[name="region"]').change(function () {
+      var selected_region = $(this).val();
+      var url = '/board/planning/get_subregion/'+selected_region;
+      $.post(url)
+          .done(function (r) {
+              $('select[name="subregion"] option').remove();
+              $('select[name="subregion"]').append(r);
+              $('select').material_select();
+          })
+  })
+</script>
+{% endblock %}
+
+

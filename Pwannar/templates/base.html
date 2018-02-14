@@ -1,0 +1,136 @@
+{%load static%}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pwannar</title>
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link href="{% static 'css/filter.css' %}" rel="stylesheet">
+  <link href="{% static 'css/fix.css' %}?ver=2" rel="stylesheet" />
+  {% block staticcss %}{% endblock %}
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <script src="{% static 'js/ajax_setting.js' %}"></script>
+
+
+  {% block staticjs %}{% endblock %}
+</head>
+<body>
+  <!--Dropdown Contents-->
+  {% if request.user.is_authenticated %}
+  <ul id="dropdown1" class="dropdown-content">
+    <li><a href="{% url 'accounts:myinfo' request.user.username %}">프로필보기</a></li>
+    <li class="divider"></li>
+    <li><a href="{% url 'message:messages' %}">받은메세지함</a></li>
+    <li class="divider"></li>
+    <li><a href="{% url 'message:send_messages' %}">보낸메세지함</a></li>
+    <li class="divider"></li>
+    <li><a href="{% url 'core:board_list' %}">동아리 게시판</a></li>
+    <li class="divider"></li>
+    <li><a href="{% url 'accounts:signout' %}">로그아웃</a><li>
+    <li class="divider"></li>
+    <li><a href="{% url 'InformationBoard:inform_list' %}">대회정보 게시판</a><li>
+  </ul>
+  {% endif %}
+
+  <nav id="nav-fixed">
+    <div class="nav-wrapper">
+      <!--mobile-->
+      <ul id="slide-out" class="side-nav">
+        {% if request.user.is_authenticated %}
+        <li>
+          <div class="user-view">
+            <div class="background">
+              <img src="{%static "images/Img1.JPG" %}">
+            </div>
+            <a href="#!user"><img class="circle" src="{{ request.user.profile.image_url }}"></a>
+            <a href="#!name"><span class="white-text name">{{ request.user }}</span></a>
+            <a href="#!email"><span class="white-text email">{{ request.user.email }}</span></a>
+          </div>
+        </li>
+        <li><a href="{% url 'accounts:myinfo' request.user.username %}">프로필 보기</a></li>
+        <li class="divider"></li>
+        <li><a href="{% url 'message:messages' %}">받은메세지함</a></li>
+        <li><a href="{% url 'message:send_messages' %}">보낸메세지함</a></li>
+        <li class="divider"></li>
+        <li><a href="{% url 'core:board_list' %}">동아리 게시판</a></li>
+        <li class="divider"></li>
+        <li><a href="{% url 'accounts:signout' %}">Log out..</a></li>
+        {% else %}
+        <li><a href="{% url 'accounts:signin' %}">로그인</a></li>
+        <li><a href="{% url 'accounts:create_user' %}">회원가입</a></li>
+        {% endif %}
+      </ul>
+      <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
+      <!--Desktop-->
+      <a href="{% url 'core:mainpage' %}" class="brand-logo" id="brand-logo-fixed">P.Wannar<i class="small material-icons">local_florist</i></a>
+      <div id="ul-fixed">
+        <ul class="right hide-on-med-and-down">
+          <li><a href="#"><i class="material-icons">search</i></a></li>
+        </ul>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li><a href="#">
+            {% if user.is_authenticated %}
+            {% else %}
+              <a href="{% url 'accounts:signin' %}">로그인</a>
+              <li><a href="{% url 'accounts:create_user' %}">가입하기</a></li>
+            {% endif %}
+          </a></li>
+          {% if request.user.is_authenticated %}
+            <li><a class="dropdown-button" href="#!" data-activates="dropdown1">{{ request.user }} <i class="material-icons right">arrow_drop_down</i></a></li>
+          {% else %}
+            <li><a class="dropdown-button" href="#!" data-activates="dropdown1"><i class="material-icons right">arrow_drop_down</i></a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+  {% block mainpage %}{% endblock %}
+  <div class="container">
+    {% block content %}{% endblock %}
+  </div>
+<footer class="page-footer" id="nav-fixed">
+  <div class="container">
+    <div class="row">
+      <div class="col l6 s12">
+        <h5 class="white-text">Pwannar</h5>
+        <p>Programming 8기</p>
+      </div>
+      <div class="col l4 offset-l2 s12">
+        <h5 class="white-text">created by..</h5>
+        <ul>
+          <li><a class="grey-text text-lighten-3" href="https://github.com/dlkorea/piro/" target="_blank"></a></li>
+          <li><a class="grey-text text-lighten-3" href="https://github.com/dlkorea/piro_remind/" target="_blank">#</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-copyright">
+    <div class="container">
+    Copyright 2018.
+    <a class="grey-text text-lighten-4 right" href="https://github.com/dlkorea/" target="_blank">#</a>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  $(document).ready(function() {
+    $('.slider').slider({
+      height: 650,
+      transition: 1200,
+      interval: 10000,
+    });
+  });
+  $(".button-collapse").sideNav();
+  $(document).ready(function(){
+    $('.collapsible').collapsible();
+  });
+</script>
+</body>
+</html>
