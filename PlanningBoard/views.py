@@ -116,5 +116,4 @@ def update(request, pk):
 def get_subegion(request, pk):
     if request.method == "POST":
         subregion_list = Tag_Region.objects.get(pk=pk).get_sebregion()
-        print(subregion_list)
         return render(request, 'subregion.html',{'subregion_list': subregion_list})

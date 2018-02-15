@@ -80,6 +80,7 @@ class Planning(models.Model):
     project = models.ManyToManyField(Tag_Project)
     team = models.ForeignKey(Team, on_delete=models.CASCADE, null=True, blank=True)
 
+
     def image_url(self):
         if self.image:
             image_url = self.image.url

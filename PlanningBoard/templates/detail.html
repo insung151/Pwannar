@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+  <script>
+    function message(url){
+        window.open(url, "", "width=1000px, height=800px");
+    }
+</script>
 <img src = "{{ detail.image_url }}">
 <p>제목: {{ detail.title }}</p>
 <p>저자: {{ detail.author }}</p>
@@ -24,7 +28,7 @@
 <button class="chip">{{ language.name }}</button>
 {% endfor %}
 
-<button>신청하기</button>
+  <button onclick="message('{% url 'message:apply' detail.team.pk %}')">신청하기</button>
 
 {% if request.user.username == detail.author %}
 <a href="{% url 'planningboard:update' detail.pk %}" type = "button">수정하기</a>
@@ -32,3 +36,4 @@
 <a href="{% url 'planningboard:list' %}">목록으로</a>
 
 {% endblock %}
+

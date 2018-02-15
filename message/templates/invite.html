@@ -3,7 +3,7 @@
 {% block content %}
   <form method="POST">
   {% csrf_token %}
-    <div class="input-field col s12"">
+    <div class="input-field col s12">
       <select name="team_list">
         <option value="" disabled selected>팀을 선택하세요</option>
         {% for team in team_list %}
