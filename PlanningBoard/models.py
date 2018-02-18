@@ -4,7 +4,6 @@ from django.conf import settings
 
 from team.models import Team
 
-
 class Tag_Region(models.Model):
     name = models.CharField(max_length=20, blank=True, null=True,)
 
@@ -80,11 +79,13 @@ class Planning(models.Model):
     project = models.ManyToManyField(Tag_Project)
     team = models.ForeignKey(Team, on_delete=models.CASCADE, null=True, blank=True)
 
+
     def image_url(self):
         if self.image:
             image_url = self.image.url
         else:
             image_url = '/static/img/default_img.png'
+
         return image_url
 
 class Comment(models.Model):

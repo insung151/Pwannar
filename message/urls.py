@@ -12,5 +12,6 @@ urlpatterns = [
     path('send_messages/', views.send_message_list, name='send_messages'),
     path('invite/<str:username>', views.invite, name='invite'),
     path('accept/<int:pk>', views.accept, name='accept'),
-    path('join/<int:pk>', views.join, name='join')
+    path('join/<int:pk>', views.join, name='join'),
+    path('apply/<int:team_pk>', views.apply, name='apply')
 ]

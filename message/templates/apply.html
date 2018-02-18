@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <form method="POST">
+  {% csrf_token %}
+    <div class="input-field col s12">
+    </div>
+  {{ form }}
+  <button type="submit">지원하기</button>
+  </form>
+{% endblock %}

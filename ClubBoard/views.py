@@ -10,9 +10,9 @@ from .forms import Create_PostForm
 #@login_required
 def blog_detail(request, pk):
     blog_detail = Create_Post.objects.get(pk=pk)
-    print(blog_detail)
     ctx = {
-        'blog_detail': blog_detail,
+        'detail': blog_detail,
+        'did_like_article': blog_detail.profile_set.filter(pk=request.user.pk).exists(),
     }
 
     return render(request, 'ClubBoard/blog_detail.html', ctx)
@@ -59,3 +59,20 @@ def blog_edit(request, pk):
     }
 
     return render(request, 'ClubBoard/blog_create.html', ctx)
+
+@login_required()
+def like(request, pk):
+    if request.method == "POST":
+        detail = get_object_or_404(Create_Post, pk=pk)
+
+        if request.user.profile.like_club.filter(pk=pk).exists():
+            detail.profile_set.remove(request.user.profile)
+        else:
+            detail.profile_set.add(request.user.profile)
+        ctx = {
+            'did_like_article': detail.profile_set.filter(pk=request.user.pk).exists(),
+            'detail': detail,
+        }
+        return render(request, 'ClubBoard/like_button.html', ctx)
+    else:
+        return HttpResponse(status=400)

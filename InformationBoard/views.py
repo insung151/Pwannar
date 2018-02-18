@@ -19,7 +19,7 @@ def inform_detail(request, pk):
         'detail': create_article,
         'comment_form': comment_form,
         'pk': pk,
-        'like_article': create_article.like_set.filter(pk=request.user.pk),
+        'did_like_article': create_article.profile_set.filter(pk=request.user.pk).exists(),
     }
 
     if request.method == "POST" and comment_form.is_valid():
@@ -80,15 +80,19 @@ def inform_delete(request, pk):
     else:
         return HttpResponse(status=400)
 
-
-@login_required
-def article_like(request, pk):
+@login_required()
+def like(request, pk):
     if request.method == "POST":
-        article = get_object_or_404(Info_Article, pk=pk)
-        if request.user.liked_article_set.filter(pk=pk).exists():
-            article.liker_set.remove(request.user)
+        detail = get_object_or_404(Info_Article, pk=pk)
+
+        if request.user.profile.like_info.filter(pk=pk).exists():
+            detail.profile_set.remove(request.user.profile)
         else:
-            article.liker_set.add(request.user)
-        return redirect(article.get_absolute_url())
+            detail.profile_set.add(request.user.profile)
+        ctx = {
+            'did_like_article': detail.profile_set.filter(pk=request.user.pk).exists(),
+            'detail': detail,
+        }
+        return render(request, 'like_button.html', ctx)
     else:
         return HttpResponse(status=400)

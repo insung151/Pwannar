@@ -18,15 +18,9 @@
   <p>
     <button onclick="message('{% url 'message:message_send' profile.user.username %}')"><i class="material-icons">message</i></button>
   </p>
-  {% for member in request.user.profile.member_set.all %}
-    {% if member.leader == True %}
-      {% if request.user.profile != profile %}
-      <button onclick="message('{% url 'message:invite' profile.user.username %}')">초대하기</button>
-      {% endif %}
-      {{ "<!--" }}
-    {% endif %}
-  {% endfor %}
-{{ "--!>" }}
+  {% if leader and request.user.profile != profile %}
+    <button onclick="message('{% url 'message:invite' profile.user.username %}')">초대하기</button>
+  {% endif %}
 
   <p>생일 : {{ profile.birth_date|default:"미입력" }}</p>
   <p>학교 : {{ profile.school |default:"미입력" }}</p>
