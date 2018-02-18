@@ -1,5 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
+
+  <form method="POST" action="{% url 'planningboard:alphabet' %}">
+  {% csrf_token %}
+    <button type="submit" id="alphabet" class='btn'>가나다순 정렬</button>
+
+  </form>
+  <form method="POST" action="{% url 'planningboard:recent' %}">
+  {% csrf_token %}
+    <button type="submit" id="recent" class="btn">최신순 정렬</button>
+  </form>
+
   <div id="search_table">
   <div class="region_category" style="border: 1px solid black">
 
@@ -21,7 +32,6 @@
 <form method="POST">
 {% csrf_token %}
 
-
   <div id="city_category">
     {% for province in province_list %}
       <div class="{{ province.pk }}_city hide">
@@ -41,6 +51,7 @@
 
 </form>
   </div>
+
 <script>
 
 $(document).ready(function() {
@@ -92,7 +103,7 @@ $('input[name="city_all"]').click(function () {
 
   <ul class="collection">
   {% for detail in detail_list %}
-    <li class="collection-item avatar">
+    <li id="{{ detail.pk }}" class="collection-item avatar">
       <a href = "{% url 'planningboard:detail' detail.pk %}">
         <img src = "{{ detail.image_url }}" alt="" style="width: 50px; height: 50px">
         <a href = "{% url 'planningboard:detail' detail.pk %}">
@@ -103,4 +114,46 @@ $('input[name="city_all"]').click(function () {
     </li>
   {% endfor %}
   </ul>
+
+<script>
+
+  var details = document.getElementsByClassName("collection-item avatar")
+  var selected_detail_list = []
+  for(var i=0; i < details.length; i++){
+    selected_detail_list.push(details[i].id);
+  }
+  var data = {selected_detail_list: selected_detail_list};
+
+$('#alphabet').click(function(e){
+  e.preventDefault();
+  alert('알파벳!');
+
+    var url = "{% url 'planningboard:alphabet' %}";
+  $.post(url, data)
+    .done(
+    function(r){
+      $('ul.collection').replaceWith(r)
+    })
+    .fail(function(){
+      alert('Error!')
+    })
+});
+
+$('#recent').click(function(e){
+  e.preventDefault();
+  alert('최신순!');
+
+  var url = "{% url 'planningboard:recent' %}";
+  $.post(url, data)
+    .done(
+    function(r){
+      $('ul.collection').replaceWith(r)
+    })
+    .fail(function(){
+      alert('Error!')
+    })
+});
+
+
+</script>
 {% endblock %}

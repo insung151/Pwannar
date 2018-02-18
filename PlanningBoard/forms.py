@@ -1,6 +1,11 @@
 from django import forms
 
-from .models import Planning, Tag_Region, Tag_Subregion
+from .models import (
+    Planning,
+    Tag_Region,
+    Tag_Subregion,
+    Comment
+    )
 from team.models import Team
 
 class PlanningCreateForm(forms.ModelForm):
@@ -20,3 +25,8 @@ class PlanningCreateForm(forms.ModelForm):
         widgets = {
             'recruiting_period': forms.DateInput(attrs={'class': 'date_picker'})
         }
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        exclude = ['author', 'detail']

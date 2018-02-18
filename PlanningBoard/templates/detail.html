@@ -6,6 +6,8 @@
         window.open(url, "", "width=1000px, height=800px");
     }
   </script>
+
+<!-- 본문영역 -->
 <img src = "{{ detail.image_url }}">
 <p>제목: {{ detail.title }}</p>
 <p>저자: {{ detail.author }}</p>
@@ -16,16 +18,36 @@
 <p>설명: {{ detail.description }}</p>
 
 <p>태그</p>
-{% for region in detail.region.all %}
-<button class="chip">{{ region.name }}</button>
+
+<form method="POST" action="{% url 'planningboard:list' %}">
+  {% csrf_token %}
+  {% for subregion in detail.subregion.all %}
+
+      <input type="submit" id="{{ subregion.pk }}_subregion" name="city" value="{{ subregion.pk}}" class="chip hide">
+      <a href="#" id="{{ subregion.pk }}_subregion_name"class="chip">{{ subregion.name }}</a>
+
+  {% endfor %}
+</form>
+
+<script>
+
+{% for subregion in detail.subregion.all %}
+$('#{{ subregion.pk }}_subregion_name').click(function(){
+  $('#{{ subregion.pk }}_subregion').click();
+});
 {% endfor %}
 
+</script>
+
+<div id="project_tag_wrapper">
 {% for project in detail.project.all %}
-<button class="chip">{{ project.name }}</button>
+<a href="#" id="{{ project.pk }}" class="chip">{{ project.name }}</a>
 {% endfor %}
+</div>
 
+<div id="language_tag_wrapper">
 {% for language in detail.language.all %}
-<button class="chip">{{ language.name }}</button>
+<a href="#" id="{{ language.pk }}" class="chip">{{ language.name }}</a>
 {% endfor %}
   <div id="like_button_wrapper" style="width: 50px; border:1px solid black">
     <a id="like_button2" href="{% url 'planningboard:like' detail.pk %}">
@@ -48,9 +70,49 @@
   </div>
   <button onclick="message('{% url 'message:apply' detail.team.pk %}')">신청하기</button>
 
-{% if request.user.username == detail.author %}
+{% if request.user == detail.author %}
 <a href="{% url 'planningboard:update' detail.pk %}" type = "button">수정하기</a>
 {% endif %}
 <a href="{% url 'planningboard:list' %}">목록으로</a>
+<!--본문 영역 끝-->
+
+<!--댓글 영역 -->
+
+<form id="comment_form" action="{% url 'planningboard:comment_create' detail.pk %}" method="POST">
+{% csrf_token %}
+    {{ comment_form.as_p }}
+  <button  type="submit">댓글달기</button>
+</form>
+
+<script>
+
+$('#comment_form').submit(function(e){
+  e.preventDefault();
+
+  var url = "{% url 'planningboard:comment_create' detail.pk %}";
+  var data = {content: $('input[name="content"]').val() };
+  console.log(url)
+
+  $.post(url, data)
+    .done(function(r){
+      $('#comment_list').prepend(r)
+      $('input[name="content"]').val('')
+    })
+    .fail(function(){
+      alert('오류가 발생했습니다.')
+    });
+})
+
+</script>
+
+<ul id="comment_list">
+  {% for comment in comment_list %}
+    <li>
+      {% include 'comment_list.html' %}
+    </li>
+  {% endfor %}
+</ul>
+
+<!--댓글 영역 끝-->
 
 {% endblock %}
