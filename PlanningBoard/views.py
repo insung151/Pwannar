@@ -6,18 +6,32 @@ from django.shortcuts import (
     )
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+from django.http import HttpResponse
 
 
-from .models import Planning, Tag_Subregion, Tag_Project, Tag_Language, Tag_Region
-from .forms import PlanningCreateForm
+from .models import (
+    Planning,
+    Tag_Subregion,
+    Tag_Project,
+    Tag_Language,
+    Tag_Region,
+    Comment
+    )
+
+from .forms import (
+    PlanningCreateForm,
+    CommentForm
+    )
 
 # Create your views here.
 
 # 목록
 def list(request):
+    print(request.POST)
     if request.method == "POST":
         selected_all = request.POST.get('city_all')
         selected_city_pk = [] + request.POST.getlist('city')
+        selected_project_pk = [] + request.POST.getlist('pro')
         if selected_all:
             url = reverse('planningboard:list') + '?selected_all=' + str(selected_all)
         else:
@@ -52,33 +66,43 @@ def list(request):
         'language_list': Tag_Language.objects.all(),
         'selected_province_pk': selected_province_pk,
         'selected_city_pk': selected_city_pk,
-        'selected_all': selected_all
+        'selected_all': selected_all,
     }
     return render (request, 'planning_list.html', ctx)
 
 def alphabet(request):
-    detail_list = Planning.objects.order_by('title')
-    region_list = Tag_Subregion.objects.all()
-    ctx = {
-        'detail_list': detail_list,
-        'region_list': region_list,
-    }
-    return render (request, 'list.html', ctx)
+
+    selected_detail_list = request.POST.getlist('selected_detail_list[]')
+    unordered_detail_list = Planning.objects.none()
+
+    for detail_pk in selected_detail_list:
+        unordered_detail_list |= Planning.objects.filter(pk=detail_pk)
+    detail_list = unordered_detail_list.order_by('title')
+
+
+    return render(request, 'detail_list.html', {'detail_list': detail_list})
 
 def recent(request):
-    detail_list = Planning.objects.order_by('-created_at')
-    region_list = Tag_Subregion.objects.all()
-    ctx = {
-        'detail_list': detail_list,
-        'region_list': region_list,
-    }
-    return render (request, 'list.html', ctx)
+
+    selected_detail_list = request.POST.getlist('selected_detail_list[]')
+    unordered_detail_list = Planning.objects.none()
+
+    for detail_pk in selected_detail_list:
+        unordered_detail_list |= Planning.objects.filter(pk=detail_pk)
+    detail_list = unordered_detail_list.order_by('-created_at')
+
+
+    return render(request, 'detail_list.html', {'detail_list': detail_list})
 
 # 게시글 화면
 def detail(request, pk):
     detail = get_object_or_404(Planning, pk=pk)
+    comment_list = Comment.objects.filter(detail__pk=detail.pk).order_by('-created_at')
+    comment_form = CommentForm(request.POST or None)
     ctx = {
         'detail': detail,
+        'comment_list': comment_list,
+        'comment_form': comment_form,
     }
     return render (request, 'detail.html', ctx)
 
@@ -118,3 +142,17 @@ def get_subegion(request, pk):
         subregion_list = Tag_Region.objects.get(pk=pk).get_sebregion()
         print(subregion_list)
         return render(request, 'subregion.html',{'subregion_list': subregion_list})
+
+def comment_create(request, detail_pk):
+
+    if request.method == "POST":
+        detail = Planning.objects.get(pk=detail_pk)
+        comment_form = CommentForm(request.POST)
+
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.author = request.user
+            new_comment.detail = detail
+            new_comment.save()
+            return render(request, 'comment_list.html', {'comment': new_comment})
+    return HttpResponse(status=405)

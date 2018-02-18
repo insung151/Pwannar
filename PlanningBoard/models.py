@@ -86,3 +86,21 @@ class Planning(models.Model):
         else:
             image_url = '/static/img/default_img.png'
         return image_url
+
+class Comment(models.Model):
+    detail = models.ForeignKey(
+        Planning,
+        on_delete=models.CASCADE,
+        related_name='comments'
+        )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='comments'
+        )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    content = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.content
