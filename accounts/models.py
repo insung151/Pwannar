@@ -2,8 +2,6 @@ from django.db import models
 from django.conf import settings
 
 
-
-
 class Profile(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -20,6 +18,9 @@ class Profile(models.Model):
     bio = models.TextField(max_length=500, blank=True, null=True)
     history = models.TextField(blank=True, null=True)
 
+    like_planning = models.ManyToManyField('PlanningBoard.Planning')
+    like_club = models.ManyToManyField('ClubBoard.Create_Post')
+    like_info = models.ManyToManyField('InformationBoard.Info_Article')
 
     def image_url(self):
         if self.image:

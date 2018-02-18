@@ -3,6 +3,9 @@ from django.contrib.auth import logout
 from django.urls import reverse
 from django.conf import settings
 
+from ClubBoard.models import Create_Post
+from InformationBoard.models import Info_Article
+from PlanningBoard.models import Planning
 from team.models import Member, Team
 from .forms import SignUpForm, LoginForm, ProfileForm, SignUpProfileForm
 from .models import Profile
@@ -152,3 +155,12 @@ def resend(request, username) :
     if User.objects.filter(username=username, is_active=False).exists():
         return send_confirm_email(request, User.objects.get(username=username))
     raise Http404('잘못된 경로입니다.')
+
+@login_required()
+def favorites(request):
+    ctx = {
+        'planning_article' : Planning.objects.filter(profile=request.user.profile),
+        'club_article': Create_Post.objects.filter(profile=request.user.profile),
+        'info_article': Info_Article.objects.filter(profile=request.user.profile),
+    }
+    return render(request, 'favorites.html', ctx)

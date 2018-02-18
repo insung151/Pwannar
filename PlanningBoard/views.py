@@ -1,4 +1,5 @@
 from django.db.models import Q
+from django.http import HttpResponse
 from django.shortcuts import (
     render,
     get_object_or_404,
@@ -79,6 +80,7 @@ def detail(request, pk):
     detail = get_object_or_404(Planning, pk=pk)
     ctx = {
         'detail': detail,
+        'did_like_article': detail.profile_set.filter(pk=request.user.pk).exists(),
     }
     return render (request, 'detail.html', ctx)
 
@@ -117,3 +119,19 @@ def get_subegion(request, pk):
     if request.method == "POST":
         subregion_list = Tag_Region.objects.get(pk=pk).get_sebregion()
         return render(request, 'subregion.html',{'subregion_list': subregion_list})
+
+def like(request, pk):
+    if request.method == "POST":
+        detail = get_object_or_404(Planning, pk=pk)
+
+        if request.user.profile.like_planning.filter(pk=pk).exists():
+            detail.profile_set.remove(request.user.profile)
+        else:
+            detail.profile_set.add(request.user.profile)
+        ctx = {
+            'did_like_article': detail.profile_set.filter(pk=request.user.pk).exists(),
+            'detail': detail,
+        }
+        return render(request, 'like_button.html', ctx)
+    else:
+        return HttpResponse(status=400)

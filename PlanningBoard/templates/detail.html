@@ -5,7 +5,7 @@
     function message(url){
         window.open(url, "", "width=1000px, height=800px");
     }
-</script>
+  </script>
 <img src = "{{ detail.image_url }}">
 <p>제목: {{ detail.title }}</p>
 <p>저자: {{ detail.author }}</p>
@@ -27,7 +27,25 @@
 {% for language in detail.language.all %}
 <button class="chip">{{ language.name }}</button>
 {% endfor %}
-
+  <div id="like_button_wrapper" style="width: 50px; border:1px solid black">
+    <a id="like_button2" href="{% url 'planningboard:like' detail.pk %}">
+    {% include 'like_button.html' %}
+    </a>
+    <script>
+      $('#like_button2').click(function (e) {
+      var self = $(this);
+      var url = self.attr('href');
+      $.post(url)
+          .done(function(r){
+              self.html(r);
+          })
+          .fail(function () {
+              alert('오류가 발생했습니다.');
+          });
+      return false;
+    });
+    </script>
+  </div>
   <button onclick="message('{% url 'message:apply' detail.team.pk %}')">신청하기</button>
 
 {% if request.user.username == detail.author %}
@@ -36,4 +54,3 @@
 <a href="{% url 'planningboard:list' %}">목록으로</a>
 
 {% endblock %}
-

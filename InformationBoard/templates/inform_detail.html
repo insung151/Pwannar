@@ -25,13 +25,25 @@
         <p>최종수정날짜: {{ detail.updated_at }}</p>
     </div>
 
-    <div id="like_button_wrapper">
-    <form action="{% url 'InformationBoard:inform_list' %}" method="POST">
-        {% csrf_token %}
-        <button type="submit" class="btn {% if like_article %}liked{% endif %}">좋아요 {{ article.like_set.count }}
-        </button>
-    </form>
-    </div>
+  <div id="like_button_wrapper" style="width: 50px; border:1px solid black">
+    <a id="like_button2" href="{% url 'informationboard:like' detail.pk %}">
+    {% include 'like_button.html' %}
+    </a>
+    <script>
+      $('#like_button2').click(function (e) {
+      var self = $(this);
+      var url = self.attr('href');
+      $.post(url)
+          .done(function(r){
+              self.html(r);
+          })
+          .fail(function () {
+              alert('오류가 발생했습니다.');
+          });
+      return false;
+    });
+    </script>
+  </div>
 
     <a href="{% url 'InformationBoard:inform_list' %}" class="waves-effect waves-light btn">목록으로</a>
 

@@ -28,7 +28,7 @@ urlpatterns = [
     path('<int:pk>/', views.blog_detail, name='blog_detail'),
     path('list/', views.blog_list, name='blog_list'),
     path('<int:pk>/edit/', views.blog_edit, name='blog_edit'),
-
+    path('like/<int:pk>', views.like, name='like')
     #path('<int:pk>/delete/', views.article_delete, name='article_delete')
     #path('accounts/',  include('accounts.urls', namespace='accounts')),
     ]

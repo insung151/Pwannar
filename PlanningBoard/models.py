@@ -4,7 +4,6 @@ from django.conf import settings
 
 from team.models import Team
 
-
 class Tag_Region(models.Model):
     name = models.CharField(max_length=20, blank=True, null=True,)
 
