@@ -17,6 +17,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
   <script src="{% static 'js/ajax_setting.js' %}"></script>
 
+
   {% block staticjs %}{% endblock %}
 </head>
 <body>
@@ -28,16 +29,12 @@
     <li><a href="{% url 'message:messages' %}">받은메세지함</a></li>
     <li class="divider"></li>
     <li><a href="{% url 'message:send_messages' %}">보낸메세지함</a></li>
-    <!--<li class="divider"></li>
-    <li><a href="{% url 'core:board_list' %}">동아리 게시판</a></li>-->
     <li class="divider"></li>
-    <li><a href="{% url 'planningboard:list' %}">기획 게시판</a></li>
+    <li><a href="{% url 'core:board_list' %}">동아리 게시판</a></li>
     <li class="divider"></li>
-    <li><a href="{% url 'InformationBoard:inform_list' %}">대회정보 게시판</a></li>
+    <li><a href="{% url 'accounts:signout' %}">로그아웃</a><li>
     <li class="divider"></li>
-    <li><a href="{% url 'ClubBoard:blog_list' %}">동아리 게시판</a></li>
-    <li class="divider"></li>
-    <li><a href="{% url 'accounts:signout' %}">로그아웃</a></li>
+    <li><a href="{% url 'InformationBoard:inform_list' %}">대회정보 게시판</a><li>
   </ul>
   {% endif %}
 
