@@ -1,6 +1,11 @@
 from django import forms
 
-from .models import Planning, Tag_Region, Tag_Subregion
+from .models import (
+    Planning,
+    Tag_Region,
+    Tag_Subregion,
+    Comment
+    )
 from team.models import Team
 
 
@@ -44,4 +49,8 @@ class PlanningCreateForm(forms.ModelForm):
             'recruiting_number': forms.NumberInput(attrs={'type': 'range', 'min': '0', 'max': '100'})
         }
 
-    #def clean_recruiting_period():
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        exclude = ['author', 'detail']

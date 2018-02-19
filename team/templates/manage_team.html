@@ -22,17 +22,9 @@
 </ul>
 <!--Project List-->
 <p>{{ team.team_name }}'s Project List</p>
-<ul id="project_list"class="collapsible popout" data-collapsible="accordion">
+<ul class="collapsible popout" data-collapsible="accordion">
 {% for team_project in team.project_set.all %}
-  <li>
-    <div class="collapsible-header">
-      <i class="material-icons">filter_drama</i>
-        {{ forloop.counter }}. {{ team_project.project_name }}
-    </div>
-    <div class="collapsible-body">
-      <span>{{ team_project.project_description }}</span>
-    </div>
-  </li>
+  {% include 'projectlist.html' %}
 {% endfor %}
 </ul>
 <a href="{% url 'team:startproject' team.team_name %}" type="button" class="btn">프로젝트 시작하기</a>

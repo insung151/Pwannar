@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>기획게시판</h2>
+  {% for planning in planning_article %}
+    <a href="{% url 'planningboard:detail' planning.pk %}">
+      <h4>{{ planning.title }}</h4>
+    </a>
+  {% endfor %}
+  <h2>동아리게시판</h2>
+  {% for club in club_article %}
+    <a href="{% url 'cluboard:blog_detail' club.pk %}">
+      <h4>{{ club.title }}</h4>
+    </a>
+  {% endfor %}
+  <h2>대회정보게시판</h2>
+  {% for info in info_article %}
+    <a href="{% url 'informationboard:inform_detail' info.pk %}">
+      <h4>{{ info.title }}</h4>
+    </a>
+  {% endfor %}
+{% endblock %}

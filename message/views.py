@@ -80,10 +80,11 @@ def invite(request, username):
         team_pk = request.POST['team_list'][0]
         team = Team.objects.get(pk=team_pk)
         message = invite_form.save(commit=False)
+        message.is_invite = True
         message.title = str(team.team_name) + "으로 초대합니다."
         message.receiver = receiver
         invite = Invite.objects.create(team=team, sender=request.user.profile, receiver=receiver)
-        message.content = str(get_current_site(request).domain)+str(reverse('message:join', kwargs={'pk': invite.pk}))
+        message.invite_url = 'http://'+str(get_current_site(request).domain)+str(reverse('message:accept', kwargs={'pk': invite.pk}))
         message.sender = request.user.profile
         message.save()
         return HttpResponse('초대메시지가 전송되었습니다.')
@@ -93,19 +94,38 @@ def invite(request, username):
     }
     return render(request, 'invite.html', ctx)
 
+@login_required()
+def apply(request, team_pk):
+    invite_form = InviteForm(request.POST or None)
+    if request.method == 'POST':
+        team = Team.objects.get(pk=team_pk)
+        receiver = Member.objects.get(team=team, leader=True).member
+        message = invite_form.save(commit=False)
+        message.title=request.user.username +'님이 '+ team.team_name +'에 지원했습니다.'
+        message.sender=request.user.profile
+        message.receiver=receiver
+        invite = Invite.objects.create(team=team, sender=request.user.profile, receiver=receiver, is_apply=True)
+        message.is_invite = True
+        message.invite_url = 'http://'+str(get_current_site(request).domain)+str(reverse('message:accept', kwargs={'pk': invite.pk}))
+        message.save()
+        return HttpResponse('메세지가 전송되었습니다.')
+    ctx = {
+        'form': invite_form,
+    }
+    return render(request, 'apply.html', ctx)
 
 def accept(request, pk):
     invite = get_object_or_404(Invite, pk=pk)
-    invite_team = invite.team
-    already_in = False  #이미 가입되어 있는 팀인지 확인
-    for member in request.user.profile.member_set.all():
-        if member.team == invite_team:
-            already_in = True
-            break
-    if already_in:
-        raise Http404('이미 가입된 팀 입니다.')
-    if request.user.profile != invite.receiver:
-        raise Http404('잘못된 경로입니다.')
+    if invite.is_apply:
+        if request.user.profile != invite.sender:
+            raise Http404('잘못된 경로입니다.')
+        if invite.sender.member_set.filter(team=invite.team).exists():
+            raise Http404('이미 가입된 사용자입니다.')
+    else:
+        if request.user.profile != invite.receiver:
+            raise Http404('잘못된 경로입니다.')
+        if request.user.profile.member_set.filter(team=invite.team).exists():
+            raise Http404('이미 가입된 팀 입니다.')
     ctx = {
         'invite': invite,
     }
@@ -114,15 +134,17 @@ def accept(request, pk):
 
 def join(request, pk):
     invite = get_object_or_404(Invite, pk=pk)
-    already_in = False  # 이미 가입되어 있는 팀인지 확인
-    for member in request.user.profile.member_set.all():
-        if member.team == invite.team:
-            already_in = True
-            break
-    if already_in:
-        raise Http404('이미 가입된 팀 입니다.')
-    if request.user.profile != invite.receiver:
-        raise Http404('잘못된 경로입니다.')
-    Member.objects.create(team=invite.team, member=request.user.profile)
+    if invite.is_apply:
+        if request.user.profile != invite.sender:
+            raise Http404('잘못된 경로입니다.')
+        if invite.sender.member_set.filter(team=invite.team).exists():
+            raise Http404('이미 가입된 사용자입니다.')
+        Member.objects.create(team=invite.team, member=invite.sender)
+    else:
+        if request.user.profile != invite.receiver:
+            raise Http404('잘못된 경로입니다.')
+        if request.user.profile.member_set.filter(team=invite.team).exists():
+            raise Http404('이미 가입된 팀 입니다.')
+        Member.objects.create(team=invite.team, member=request.user.profile)
     invite.delete()
     return redirect(reverse('accounts:myinfo', kwargs={'username':request.user.username}))

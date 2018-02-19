@@ -4,6 +4,7 @@ from django.contrib import admin
 
 from .models import (
     Planning,
+    Comment,
     Tag_Region,
     Tag_Subregion,
     Tag_Project,
@@ -11,6 +12,8 @@ from .models import (
     )
 
 admin.site.register(Planning)
+admin.site.register(Comment)
+
 admin.site.register(Tag_Subregion)
 admin.site.register(Tag_Project)
 admin.site.register(Tag_Language)
