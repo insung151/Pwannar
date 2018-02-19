@@ -59,7 +59,7 @@ def SignIn(request):
 
     if request.method == "POST" and form.is_valid():
         login(request, form.get_user())
-        next = request.GET.get('next') or request.path
+        next = request.GET.get('next') or reverse('core:mainpage')
         return redirect(next)
     if User.objects.filter(username=form.get_user()).exists():
         return redirect(reverse('accounts:confirm', kwargs={'username': form.get_user()}))
