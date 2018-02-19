@@ -5,13 +5,11 @@ from django.shortcuts import (
     get_object_or_404,
     redirect
     )
-from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.http import HttpResponse
 
 
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from .models import (
     Planning,
     Tag_Subregion,
@@ -26,6 +24,7 @@ from .forms import (
     CommentForm
     )
 
+# Create your views here.
 
 # 목록
 def detail_list(request):
@@ -148,6 +147,7 @@ def detail_list_html(request):
     return render(request, 'detail_list.html', ctx)
 
 def alphabet(request):
+
     selected_detail_list = request.POST.getlist('selected_detail_list[]')
     unordered_detail_list = Planning.objects.none()
 
@@ -167,7 +167,6 @@ def recent(request):
 
     return render(request, 'detail_list.html', {'detail_list': detail_list})
 
-
 # 게시글 화면
 def detail(request, pk):
     detail = get_object_or_404(Planning, pk=pk)
@@ -179,11 +178,11 @@ def detail(request, pk):
         'comment_list': comment_list,
         'comment_form': comment_form,
     }
-    return render(request, 'detail.html', ctx)
-
+    return render (request, 'detail.html', ctx)
 
 @login_required
 def create(request):
+
     form = PlanningCreateForm(request.user.profile, request.POST or None, request.FILES or None,)
     if request.method == "POST" and form.is_valid():
         article = form.save(commit=False)
@@ -191,57 +190,27 @@ def create(request):
 
         article.save()
         form.save_m2m()
-
         return redirect(reverse('planningboard:detail', kwargs={'pk': article.pk}))
     ctx = {
         'form': form,
-        'region': Tag_Region.objects.all(),
-        'subregion': Tag_Subregion.objects.all()
+        'region':Tag_Region.objects.all(),
+        'subregion':Tag_Subregion.objects.all()
     }
-    return render(request, 'create.html', ctx)
+    return render (request, 'create.html', ctx)
 
-'''@login_required
 def update(request, pk):
     detail = get_object_or_404(Planning, pk=pk)
     form = PlanningCreateForm(request.POST or None, instance=detail)
     if request.method == "POST" and form.is_valid():
-        #new_form = form.save(commit=False)
-        # new_form.author = request.user
-        # new_form.tag_set = request.user.tag_set.all()
-        planning = form.save()
-        return redirect(planning.get_absolute_url())
-    ctx = {
-        'form': form
-    }
-
-    return render(request, 'create.html', ctx)'''
-
-
-@login_required
-def update(request, pk):
-    detail = get_object_or_404(Planning, pk=pk)
-    form = PlanningCreateForm(request.POST or None, instance=detail,)
-    if request.method == "POST" and form.is_valid():
-        new_form = form.save(commit=False)
-        # new_form.author = request.user
-        # new_form.tag_set = request.user.tag_set.all()
-        planning = new_form.save()
-        return redirect(planning.get_absolute_url())
+       new_form = form.save(commit=False)
+       # new_form.author = request.user
+       # new_form.tag_set = request.user.tag_set.all()
+       new_form.save()
+       return redirect(reverse('planningboard:detail', kwargs={'pk': pk}))
     ctx = {
         'form': form
     }
     return render(request, 'create.html', ctx)
-
-
-@login_required
-def delete(request, pk):
-    if request.method == "POST":
-        detail = get_object_or_404(Planning, pk=pk)
-        detail.delete()
-        return redirect(reverse('planningboard:list'))
-    else:
-        return HttpResponse(status=400)
-
 
 def get_subegion(request, pk):
     if request.method == "POST":
@@ -280,4 +249,3 @@ def comment_create(request, detail_pk):
             new_comment.save()
             return render(request, 'comment_list.html', {'comment': new_comment})
     return HttpResponse(status=405)
-

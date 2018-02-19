@@ -12,7 +12,7 @@
       </div>
       <div class = "content">
         <div class = "title">
-          <a href = "{% url 'ClubBoard:blog_detail' blog.pk %}"><p>{{ blog.title }}/{{ blog.created_at }}</p></a>
+          <a href = "{% url 'ClubBoard:blog_detail' blog.pk %}"><p>{{ blog.title }}/{{ blog.created_at }}</p> <strong>조회수: {{blog.view_count}}</strong></a>
         </div>
         <div class = "author">
           <p>{{ blog.author }}</p>
