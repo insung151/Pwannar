@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponse
+from django.views.decorators.http import require_POST
+
 
 from .models import Member, Team, Project
 from .forms import TeamForm, MemberForm, ProjectForm
@@ -67,14 +69,16 @@ def start_project(request, team_name):
     return render(request, 'startproject.html', ctx)
 
 
-# def delete_project(request, pk):
-#     team = Project.objects.get(pk=pk).team
-#     if request.method == "POST" and request.user.profile == Member.objects.get(team=team, leader=True).member:
-#         team_project = get_object_or_404(Project, pk=pk)
-#         team_project.delete()
-#         return render(request, 'project_list.html')
-#     else:
-#         HttpResponse(status=400)
+def delete_project(request, pk):
+    team = Project.objects.get(pk=pk).team
+    if request.method == "POST" and request.user.profile == Member.objects.get(team=team, leader=True).member:
+        team_project = get_object_or_404(Project, pk=pk)
+        team_project.delete()
+        return redirect(reverse(
+            'team:manage_team',
+            kwargs={'team_name': request.user.profile.member_set.filter(team=team).get().team}
+        ))
+    return render(request, 'projectlist.html')
 
 
 
@@ -84,5 +88,3 @@ def finish_project(request):
 
 def manage_member(request):
     pass
-
-

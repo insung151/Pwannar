@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form method = "POST">
+<form method="POST" enctype="multipart/form-data">
   {% csrf_token %}
   {{ form.as_p }}
   <button type = "submit" style="display:block;">제출하기</button>
@@ -14,16 +14,18 @@
       {#$('select[name="subregion"]').closest("div").children('ul').append('<li class=""><span><input type="checkbox"><label></label>강남구</span></li>');#}
       {#$('select').material_select();#}
   });
-
-$('.date_picker').pickadate({
-  selectMonths: true, // Creates a dropdown to control month
-  selectYears: 15, // Creates a dropdown of 15 years to control year,
+  $('.date_picker').pickadate({
+    selectMonths: true, // Creates a dropdown to control month
+    selectYears: 15, // Creates a dropdown of 15 years to control year,
     today: 'Today',
     clear: 'Clear',
     close: 'Ok',
     closeOnSelect: false, // Close upon selecting a date,
-    format:'yyyy-mm-dd'
-});
+    format:'yyyy-mm-dd',
+    min: Date.now()
+  });
+
+  $('#id_recruiting_number').parent().addClass('range-field')
 
   $('select[name="region"]').change(function () {
       var selected_region = $(this).val();
