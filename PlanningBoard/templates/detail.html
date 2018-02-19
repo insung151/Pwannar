@@ -16,25 +16,9 @@
 
 <p>태그</p>
 
-<form method="POST" action="{% url 'planningboard:list' %}">
-  {% csrf_token %}
   {% for subregion in detail.subregion.all %}
-
-      <input type="submit" id="{{ subregion.pk }}_subregion" name="city" value="{{ subregion.pk}}" class="chip hide">
-      <a href="#" id="{{ subregion.pk }}_subregion_name"class="chip">{{ subregion.name }}</a>
-
+    <a href="{% url 'planningboard:list' %}?selected_city_pk=[{{ subregion.pk }}]" id="{{ subregion.pk }}_subregion_name"class="chip">{{ subregion.name }}</a>
   {% endfor %}
-</form>
-
-<script>
-
-{% for subregion in detail.subregion.all %}
-$('#{{ subregion.pk }}_subregion_name').click(function(){
-  $('#{{ subregion.pk }}_subregion').click();
-});
-{% endfor %}
-
-</script>
 
 <div id="project_tag_wrapper">
 {% for project in detail.project.all %}
@@ -105,15 +89,15 @@ $('#comment_form').submit(function(e){
 
   var url = "{% url 'planningboard:comment_create' detail.pk %}";
   var data = {content: $('input[name="content"]').val() };
-  console.log(url)
+  console.log(url);
 
   $.post(url, data)
     .done(function(r){
-      $('#comment_list').prepend(r)
-      $('input[name="content"]').val('')
+      $('#comment_list').prepend(r);
+      $('input[name="content"]').val('');
     })
     .fail(function(){
-      alert('오류가 발생했습니다.')
+      alert('오류가 발생했습니다.');
     });
 })
 
