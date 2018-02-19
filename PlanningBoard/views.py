@@ -205,6 +205,7 @@ def update(request, pk):
        # new_form.author = request.user
        # new_form.tag_set = request.user.tag_set.all()
        new_form.save()
+       form.save_m2m()
        return redirect(reverse('planningboard:detail', kwargs={'pk': pk}))
     ctx = {
         'form': form
