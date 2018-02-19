@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<meta charset="utf-8">
+<title>동아리 홍보 게시판</title>
+
+<div>
+    <div style="padding: 80px 0 30px 0; margin-bottom: 50px;">
+        <h5 style="text-align: center; color: #9fc3e0;">{{ blog_detail.title }}</h5>
+        <div style="text-align: right;
+                    margin-top: 30px;
+                    margin-right: 10px;
+                    font-size: 12px;">
+            <span>{{ blog_detail.created_at|date:"Y.m.d h:i A" }}</span><br />
+
+        </div>
+    </div>
+        <img src = "{{ blog_detail.image_url }}">
+        <p>제목: {{ blog_detail.title }}</p>
+        <p>글쓴이: {{ blog_detail.author }}</p>
+        <p>동아리 이름: {{ blog_detail.club_name }}</p>
+        <p>모집 마감일: {{ blog_detail.recruiting_period }}</p>
+        <p>모집 인원: {{ blog_detail.recruiting_number }}</p>
+        <p>설명: {{ blog_detail.description }}</p>
+        <p>작성 날짜: {{ blog_detail.created_at }}</p>
+        <p>최종 수정 날짜: {{ blog_detail.updated_at }}</p>
+</div>
+
+    <a href="{% url 'ClubBoard:blog_list' %}">
+        <button>목록으로</button>
+    </a>
+
+        <button>수정하기</button>
+    <form id='article_delete_form' action="{% url 'ClubBoard:blog_list' %}" method="POST" style="display: inline-block;">
+            {% csrf_token %}
+            <button type="submit" class="waves-effect waves-light btn">삭제</button>
+        </form>
+        <script>
+            $('#article_delete_form').submit(function(e){
+                if (!confirm('지우시겠습니까?')) {
+                    e.preventDefault();
+                }
+            });
+        </script>
+
+{% endblock %}
+
+

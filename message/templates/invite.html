@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <form method="POST">
+  {% csrf_token %}
+    <div class="input-field col s12"">
+      <select name="team_list">
+        <option value="" disabled selected>팀을 선택하세요</option>
+        {% for team in team_list %}
+          <option value="{{ team.pk }}">{{ team.team_name }}</option>
+        {% endfor %}
+      </select>
+    <label>팀</label>
+    </div>
+  {{ form }}
+  <button type="submit">초대하기</button>
+  </form>
+<script>
+  $(document).ready(function() {
+      $('select').material_select();
+  });
+</script>
+{% endblock %}

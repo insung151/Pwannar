@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block staticcss %}
+
+{% endblock %}
+
+{% block staticjs %}
+<script src="{% static 'js/accounts.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<!--Profile-->
+<div class="profile">
+  <h4> {{ profile.user.get_full_name }} 님의 프로필 페이지입니다</h4>
+  <img class="responsive-img" src="{{ profile.image_url }}" style="width:200px; height:200px;">
+  <p>
+    <button onclick="message('{% url 'message:message_send' profile.user.username %}')"><i class="material-icons">message</i></button>
+  </p>
+  {% for member in request.user.profile.member_set.all %}
+    {% if member.leader == True %}
+      {% if request.user.profile != profile %}
+      <button onclick="message('{% url 'message:invite' profile.user.username %}')">초대하기</button>
+      {% endif %}
+      {{ "<!--" }}
+    {% endif %}
+  {% endfor %}
+{{ "--!>" }}
+
+  <p>생일 : {{ profile.birth_date|default:"미입력" }}</p>
+  <p>학교 : {{ profile.school |default:"미입력" }}</p>
+  <p>지역 : {{ profile.location|default:"미입력" }}</p>
+  <p>자기소개 : {{ profile.bio|default:"미입력" }}</p>
+  <p>경력 : {{ profile.history|default:"미입력" }}</p>
+</div>
+{% if request.user.profile == profile %}
+ <a href="{% url 'accounts:edit_myinfo'%}" type="button" class="btn">프로필수정</a>
+{% endif %}
+
+<!--team-->
+<h4>내 팀 현황</h4>
+<div class="row">
+  <div class="col s12">
+    <ul class="tabs">
+    {% for team in team_list %}
+      <li class="tab col s3"><a href="#test{{ forloop.counter }}">{{ team.team_name }}</a></li>
+    {% endfor %}
+    </ul>
+  </div>
+  {% for team in team_list %}
+  <div id="test{{ forloop.counter }}" class="col s12" style="margin-top:5px">
+    <ul class="collection">
+    {% for team_member in team.member_set.all %}
+      <li class="collection-item avatar">
+      <img src="{{ team_member.member.image_url }}" alt="" class="circle">
+        <span class="title">
+          {{ team_member.member.user.get_full_name }}
+        </span>
+        <p style="color:#bd2a2a">{{ team_member.position }}</p>
+        <a href="{% url 'accounts:myinfo' team_member.member %}" class="secondary-content"><i class="material-icons">send</i></a>
+      </li>
+    {% endfor %}
+    </ul>
+    <a href="{% url 'team:manage_team' team.team_name %}">팀 자세히보기</a>
+  </div>
+  {% endfor %}
+  <a href="{% url 'team:createteam' %}" type="button" class="btn">팀만들기</a>
+</div>
+
+<!--Project-->
+<h3>{{ profile.user }}님이 진행 중인 프로젝트</h3>
+{% for team in team_list %}
+  <h4>{{ team.team_name }}'s Team</h4>
+  <ul class="collapsible popout" data-collapsible="accordion">
+  {% for team_project in team.project_set.all %}
+    <li>
+      <div class="collapsible-header">
+        <i class="material-icons">filter_drama</i>
+          {{ forloop.counter }}. {{ team_project.project_name }}
+      </div>
+      <div class="collapsible-body">
+        <span>{{ team_project.project_description }}</span>
+      </div>
+    </li>
+  {% endfor %}
+  </ul>
+{% endfor %}
+{% endblock %}
+
+

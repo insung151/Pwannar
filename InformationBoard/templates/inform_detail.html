@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<meta charset="utf-8">
+<title>대회정보 게시판</title>
+
+<div>
+    <div style="padding: 80px 0 30px 0; margin-bottom: 50px;">
+        <h5 style="text-align: center; color: #9fc3e0;">{{ article.title }}</h5>
+        <div style="text-align: right;
+                    margin-top: 30px;
+                    margin-right: 10px;
+                    font-size: 12px;">
+            <span>{{ article.created_at|date:"Y.m.d h:i A" }}</span><br />
+
+        </div>
+    </div>
+        <img src = "{{ detail.image_url }}">
+        <p>제목: {{ detail.title }}</p>
+        <p>글쓴이: {{ detail.author }}</p>
+        <p>모집마감일: {{ detail.recruiting_period }}</p>
+        <p>모집인원: {{ detail.recruiting_number }}</p>
+        <p>설명: {{ detail.explanation }}</p>
+        <p>작성날짜: {{ detail.created_at }}</p>
+        <p>최종수정날짜: {{ detail.updated_at }}</p>
+    <a href ="{{ detail.url }}">{{ detail.url }}</a>
+
+    <div id="like_button_wrapper">
+    <form action="{% url 'InformationBoard:inform_list' %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn {% if like_article %}liked{% endif %}">좋아요 {{ article.like_set.count }}
+        </button>
+    </form>
+    </div>
+
+    <a href="{% url 'InformationBoard:inform_list' %}">
+        <button>목록으로</button>
+    </a>
+
+    <div style="float: right;">
+        <a href="{% url 'InformationBoard:inform_edit' detail.pk %}">
+            <button>수정하기</button>
+        </a>
+        <form id='article_delete_form' action="{% url 'InformationBoard:inform_delete' detail.pk %}" method="POST" style="display: inline-block;">
+            {% csrf_token %}
+            <button type="submit" class="waves-effect waves-light btn">삭제</button>
+        </form>
+        <script>
+            $('#article_delete_form').submit(function(e){
+                if (!confirm('지우시겠습니까?')) {
+                    e.preventDefault();
+                }
+            });
+        </script>
+    </div>
+</div>
+{% endblock %}

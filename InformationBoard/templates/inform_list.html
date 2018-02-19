@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+{% for article in inform_list %}
+<ul>
+  <li class = "list_set">
+    <div class = "media" >
+      <a href = "{% url 'InformationBoard:inform_detail' article.pk %}"><img src = "{{ article.image_url }}"></a>
+      </div>
+      <div class = "content">
+        <div class = "title">
+          <a href = "{% url 'InformationBoard:inform_detail' article.pk %}"><p>{{ article.title }}/{{ article.created_at }}</p></a>
+        </div>
+        <div class = "author">
+          <p>{{ article.author }}</p>
+        </div>
+      </div>
+    </div>
+  </li>
+  </ul>
+
+{% endfor %}
+<a href="{% url 'InformationBoard:inform_create' %}">
+    <button>글쓰기</button>
+</a>
+{% endblock %}

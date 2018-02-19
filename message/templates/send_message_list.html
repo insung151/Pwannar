@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+  <table>
+    <thead>
+    <tr>
+      <th>받는사람</th>
+      <th>제목</th>
+      <th>날짜</th>
+      <th>수신확인</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for message in messages %}
+      <tr>
+        <td><a href="{% url 'accounts:myinfo' message.receiver %}">{{ message.receiver }}</a></td>
+        <td><a href="{% url 'message:message_detail' message.pk %}">{{ message.title }}</a></td>
+        <td>{{ message.send_time }}</td>
+        <td>{% if message.is_read %}{{ message.read_time }}{% else %}읽지않음{% endif %}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

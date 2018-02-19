@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div id="search_table">
+  <div class="region_category" style="border: 1px solid black">
+
+  <div id="region_title">
+    <p>지역</p>
+  </div>
+
+  <div id="province_cateogory">
+    <select name="province" id="province">
+    <option value="" disabled selected>지역</option>
+    {% for province in province_list %}
+{#    <input type="checkbox" id="{{ province.pk }}_province" name="province" value="{{ province.pk }}">#}
+{#    <label for="{{ province.pk }}_province">{{ province }}</label>#}
+      <option value="{{ province.pk }}" id="{{ province.pk }}_province">{{ province.name }}</option>
+    {% endfor %}
+    </select>
+  </div>
+
+<form method="POST">
+{% csrf_token %}
+
+
+  <div id="city_category">
+    {% for province in province_list %}
+      <div class="{{ province.pk }}_city hide">
+        <input type="checkbox" id="all_{{ province.pk }}" name="city_all" value="{{ province.pk }}">
+        <label for="all_{{ province.pk }}">전체선택</label>
+      </div>
+      {% for city in province.subregions.all %}
+      <div class="{{ province.pk }}_city hide" style="display: inline-block;">
+        <input type="checkbox" id="{{ city.pk }}_city" name="city" value="{{ city.pk }}">
+        <label for="{{ city.pk }}_city">{{ city }}</label>
+      </div>
+      {% endfor %}
+    {% endfor %}
+  </div>
+</div>
+<button type="submit">검색</button>
+
+</form>
+  </div>
+<script>
+
+$(document).ready(function() {
+    $('select[name="province"]').val('{{ selected_province_pk }}');
+    $('select').material_select();
+    {% for city in selected_city_pk %}
+        console.log('#'+{{ city }}+'_city');
+        $('#'+{{ city }}+'_city').get(0).checked=true;
+        console.log($('#'+{{ city }}+'_city').get(0));
+    {% endfor %}
+    if ({{ selected_province_pk }} != 0){
+        $('select').change();
+    }
+    {% if selected_all %}
+        $('#all_'+{{ selected_all }}).click();
+    {% endif %}
+  });
+
+var target= document.getElementById("province");
+var selected_province_pk = target.options[target.selectedIndex].value;
+$('select[name="province"]').change(function () {
+    $('div.'+selected_province_pk+'_city').addClass('hide');
+    for (var i=0; i< $('div.'+selected_province_pk+'_city input').length; i++){
+         $('div.'+selected_province_pk+'_city input').get(i).checked = false
+    }
+    selected_province_pk = target.options[target.selectedIndex].value;
+    $('div.'+selected_province_pk+'_city').removeClass('hide');
+    var checkboxes = $('input[type="checkbox"]');
+    for (var i=0; i<checkboxes.length; i++){
+        checkboxes.get(i).disabled=false;
+    }
+});
+
+$('input[name="city_all"]').click(function () {
+    var checkboxes = $('input[name="city"]');
+    if($(this).is(':checked')){
+        for(var i=0; i<checkboxes.length; i++){
+            checkboxes.get(i).checked = false;
+            checkboxes.get(i).disabled = true;
+        }
+    }else{
+        for(var i=0; i<checkboxes.length; i++){
+            checkboxes.get(i).disabled = false;
+        }
+    }
+})
+
+</script>
+
+  <ul class="collection">
+  {% for detail in detail_list %}
+    <li class="collection-item avatar">
+      <a href = "{% url 'planningboard:detail' detail.pk %}">
+        <img src = "{{ detail.image_url }}" alt="" style="width: 50px; height: 50px">
+        <a href = "{% url 'planningboard:detail' detail.pk %}">
+          <span class="title">{{ detail.title }}/{{ detail.created_at }}</span>
+        </a>
+        <p>{{ detail.author }}</p>
+      </a>
+    </li>
+  {% endfor %}
+  </ul>
+{% endblock %}

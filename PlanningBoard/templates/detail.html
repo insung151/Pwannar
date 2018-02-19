@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<img src = "{{ detail.image_url }}">
+<p>제목: {{ detail.title }}</p>
+<p>글쓴이: {{ detail.author }}</p>
+<p>모집기간: {{ detail.recruiting_period }}</p>
+<p>모집인원: {{ detail.recruiting_number }}</p>
+
+{# <img {{ detail.image }} /> #}
+<p>설명: {{ detail.description }}</p>
+
+<p>태그</p>
+{% for region in detail.region.all %}
+<button class="chip">{{ region.name }}</button>
+{% endfor %}
+
+{% for project in detail.project.all %}
+<button class="chip">{{ project.name }}</button>
+{% endfor %}
+
+{% for language in detail.language.all %}
+<button class="chip">{{ language.name }}</button>
+{% endfor %}
+
+<button>신청하기</button>
+
+{% if request.user.username == detail.author %}
+<a href="{% url 'planningboard:update' detail.pk %}" type = "button">수정하기</a>
+{% endif %}
+<a href="{% url 'planningboard:list' %}">목록으로</a>
+
+{% endblock %}

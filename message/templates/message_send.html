@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="text-align: center; margin-top: 100px;">
+  <h2>메세지 전송</h2><br>
+  <h3>받는 사람: {{ receiver }}</h3>
+  <form id="message_send" method="POST">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit">전송</button>
+  </form>
+  <script>
+    $('#message_send').submit(function(e) {
+        if (!confirm('메세지를 전송하시겠습니까?')) {
+            e.preventDefault();
+        }
+        else {
+            alert('메시지가 전송되었습니다.')
+        }
+    });
+  </script>
+</div>
+
+{% endblock %}
