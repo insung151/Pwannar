@@ -8,7 +8,8 @@ urlpatterns = [
     path('detail/<int:pk>/', views.detail, name='detail'),
     path('create/', views.create, name='create'),
     path('update/<int:pk>/', views.update, name='update'),
+    path('delete/<int:pk>/', views.delete, name='delete'),
     path('recent/', views.recent, name='recent'),
     path('alphabet/', views.alphabet, name='alphabet'),
-    path('get_subregion/<int:pk>',views.get_subegion, name='get_subregion'),
+    path('get_subregion/<int:pk>', views.get_subegion, name='get_subregion'),
 ]

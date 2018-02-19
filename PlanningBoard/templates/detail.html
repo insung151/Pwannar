@@ -2,13 +2,11 @@
 
 {% block content %}
 
-<img src = "{{ detail.image_url }}">
+<img class="responsive-img" src="{{ detail.image_url }}">
 <p>제목: {{ detail.title }}</p>
 <p>저자: {{ detail.author }}</p>
 <p>모집기간: {{ detail.recruiting_period }}</p>
 <p>모집인원: {{ detail.recruiting_number }}</p>
-
-{# <img {{ detail.image }} /> #}
 <p>설명: {{ detail.description }}</p>
 
 <p>태그</p>
@@ -24,11 +22,25 @@
 <button class="chip">{{ language.name }}</button>
 {% endfor %}
 
-<button>신청하기</button>
-
-{% if request.user.username == detail.author %}
+<!--{% if request.user.username == detail.author %}
 <a href="{% url 'planningboard:update' detail.pk %}" type = "button">수정하기</a>
-{% endif %}
-<a href="{% url 'planningboard:list' %}">목록으로</a>
+{% endif %}-->
 
+<div style="margin-bottom: 10px;">
+<a href="{% url 'planningboard:update' detail.pk %}" class="waves-effect waves-light btn">수정하기</a>
+<form id='delete_form' action="{% url 'planningboard:delete' detail.pk %}" method="POST" style="display: inline-block;">
+    {% csrf_token %}
+    <button type="submit" class="waves-effect waves-light btn">삭제하기</button>
+</form>
+<script>
+    $('#delete_form').submit(function(e){
+            if (!confirm('지우시겠습니까?')) {
+                e.preventDefault();
+            }
+    });
+</script>
+
+<a class="waves-effect waves-light btn">신청하기</a>
+<a href="{% url 'planningboard:list' %}" class="waves-effect waves-light btn">목록으로</a>
+</div>
 {% endblock %}

@@ -4,7 +4,7 @@
   <div class="region_category" style="border: 1px solid black">
 
   <div id="region_title">
-    <p>지역</p>
+    <p>지역별</p>
   </div>
 
   <div id="province_cateogory">
@@ -38,9 +38,9 @@
   </div>
 </div>
 <button type="submit">검색</button>
-
 </form>
   </div>
+  <a id="create_button" href="{% url 'planningboard:create' %}" class="waves-effect waves-light btn">글쓰기</a>
 <script>
 
 $(document).ready(function() {
@@ -90,7 +90,7 @@ $('input[name="city_all"]').click(function () {
 
 </script>
 
-  <ul class="collection">
+<ul class="collection">
   {% for detail in detail_list %}
     <li class="collection-item avatar">
       <a href = "{% url 'planningboard:detail' detail.pk %}">
@@ -102,5 +102,6 @@ $('input[name="city_all"]').click(function () {
       </a>
     </li>
   {% endfor %}
-  </ul>
+</ul>
+
 {% endblock %}
