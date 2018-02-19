@@ -1,0 +1,13 @@
+<li id="project_list">
+  <div class="collapsible-header">
+    <i class="material-icons">filter_drama</i>
+      {{ forloop.counter }}. {{ team_project.project_name }}
+  </div>
+  <div class="collapsible-body">
+    <p>{{ team_project.project_description }}</p>
+    <form id="project_delete_form" action="{% url 'team:deleteproject' team_project.pk %}" method="POST" style="float: right;">
+      {% csrf_token %}
+      <button id="delete_project_button" type="submit" class="waves-effect waves-light btn">프로젝트 취소</button>
+    </form>
+  </div>
+</li>
