@@ -9,14 +9,13 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
   <link href="{% static 'css/filter.css' %}" rel="stylesheet">
-  <link href="{% static 'css/fix.css' %}?ver=1" rel="stylesheet" />
+  <link href="{% static 'css/fix.css' %}?ver=2" rel="stylesheet" />
   {% block staticcss %}{% endblock %}
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
   <script src="{% static 'js/ajax_setting.js' %}"></script>
-
 
   {% block staticjs %}{% endblock %}
 </head>
@@ -29,12 +28,16 @@
     <li><a href="{% url 'message:messages' %}">받은메세지함</a></li>
     <li class="divider"></li>
     <li><a href="{% url 'message:send_messages' %}">보낸메세지함</a></li>
+    <!--<li class="divider"></li>
+    <li><a href="{% url 'core:board_list' %}">동아리 게시판</a></li>-->
     <li class="divider"></li>
-    <li><a href="{% url 'core:board_list' %}">동아리 게시판</a></li>
+    <li><a href="{% url 'planningboard:list' %}">기획 게시판</a></li>
     <li class="divider"></li>
-    <li><a href="{% url 'accounts:signout' %}">로그아웃</a><li>
+    <li><a href="{% url 'InformationBoard:inform_list' %}">대회정보 게시판</a></li>
     <li class="divider"></li>
-    <li><a href="{% url 'InformationBoard:inform_list' %}">대회정보 게시판</a><li>
+    <li><a href="{% url 'ClubBoard:blog_list' %}">동아리 게시판</a></li>
+    <li class="divider"></li>
+    <li><a href="{% url 'accounts:signout' %}">로그아웃</a></li>
   </ul>
   {% endif %}
 
@@ -122,8 +125,7 @@
 <script>
   $(document).ready(function() {
     $('.slider').slider({
-      height: 500
-      ,
+      height: 650,
       transition: 1200,
       interval: 10000,
     });
