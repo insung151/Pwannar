@@ -12,7 +12,7 @@ def blog_detail(request, pk):
     blog_detail = Create_Post.objects.get(pk=pk)
     Create_Post.objects.filter(id=pk).update(view_count=blog_detail.view_count + 1)
     ctx = {
-        'blog_detail': blog_detail,
+        'detail': blog_detail,
     }
 
     return render(request, 'ClubBoard/blog_detail.html', ctx)
