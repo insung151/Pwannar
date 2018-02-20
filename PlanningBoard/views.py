@@ -182,7 +182,6 @@ def detail(request, pk):
 
 @login_required
 def create(request):
-
     form = PlanningCreateForm(request.user.profile, request.POST or None, request.FILES or None,)
     if request.method == "POST" and form.is_valid():
         article = form.save(commit=False)
@@ -197,6 +196,13 @@ def create(request):
         'subregion':Tag_Subregion.objects.all()
     }
     return render (request, 'create.html', ctx)
+def delete(request, pk):
+    if request.method == "POST":
+        detail = get_object_or_404(Planning, pk=pk)
+        detail.delete()
+        return redirect(reverse('planningboard:list'))
+    else:
+        return HttpResponse(status=400)
 
 def update(request, pk):
     detail = get_object_or_404(Planning, pk=pk)
@@ -213,7 +219,7 @@ def update(request, pk):
     }
     return render(request, 'create.html', ctx)
 
-def get_subegion(request, pk):
+def get_subregion(request, pk):
     if request.method == "POST":
         subregion_list = Tag_Region.objects.get(pk=pk).get_sebregion()
         return render(request, 'subregion.html',{'subregion_list': subregion_list})

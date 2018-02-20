@@ -23,7 +23,8 @@ class PlanningCreateForm(forms.ModelForm):
         model = Planning
         exclude = ['author', 'created_at']
         widgets = {
-            'recruiting_period': forms.DateInput(attrs={'class': 'date_picker'})
+            'recruiting_period': forms.DateInput(attrs={'class': 'date_picker'}),
+            'recruiting_number': forms.NumberInput(attrs={'type': 'range', 'min': '0', 'max': '100'})
         }
 
 class CommentForm(forms.ModelForm):
