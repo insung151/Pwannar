@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
-from .models import Info_Article, Info_Comment
-from .forms import ArticleForm, CommentForm
+from .models import Info_Article
+from .forms import ArticleForm
 
 
 def MainPage(request):
@@ -13,21 +13,12 @@ def MainPage(request):
 @login_required
 def inform_detail(request, pk):
     create_article = get_object_or_404(Info_Article, pk=pk)
-    comment_form = CommentForm(request.POST or None)
 
     ctx = {
         'detail': create_article,
-        'comment_form': comment_form,
         'pk': pk,
         'did_like_article': create_article.profile_set.filter(pk=request.user.pk).exists(),
     }
-
-    if request.method == "POST" and comment_form.is_valid():
-        new_comment = comment_form.save(commit=False)
-        new_comment.article = create_article
-        new_comment.author = request.user
-        new_comment.save()
-        return redirect(create_article.get_absolute_url())
 
     return render(request, 'inform_detail.html', ctx)
 
@@ -46,7 +37,9 @@ def inform_create(request):
     form = ArticleForm(request.POST or None)
 
     if request.method == "POST" and form.is_valid():
-            article = form.save()
+            article = form.save(commit=False)
+            article.author = request.user
+            article.save()
             return redirect(article.get_absolute_url())
 
     ctx = {
@@ -96,3 +89,19 @@ def like(request, pk):
         return render(request, 'like_button.html', ctx)
     else:
         return HttpResponse(status=400)
+
+
+def inform_edit(request, pk):
+    article_detail = get_object_or_404(Info_Article, pk=pk)
+    form = ArticleForm(request.POST or None, instance=article_detail)
+
+    if request.method == "POST" and form.is_valid():
+        new_form = form.save(commit=False)
+        new_form.save()
+        return redirect(reverse('InformationBoard:inform_detail', kwargs={'pk': pk}))
+
+    ctx = {
+        'form': form,
+    }
+
+    return render(request, 'inform_create.html', ctx)
