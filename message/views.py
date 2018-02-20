@@ -83,7 +83,7 @@ def invite(request, username):
         message.is_invite = True
         message.title = str(team.team_name) + "으로 초대합니다."
         message.receiver = receiver
-        invite = Invite.objects.create(team=team, sender=request.user.profile, receiver=receiver)
+        invite = Invite.objects.create(team=team, sender=request.user.profile, receiver=receiver, message=message)
         message.invite_url = 'http://'+str(get_current_site(request).domain)+str(reverse('message:accept', kwargs={'pk': invite.pk}))
         message.sender = request.user.profile
         message.save()
@@ -104,7 +104,7 @@ def apply(request, team_pk):
         message.title=request.user.username +'님이 '+ team.team_name +'에 지원했습니다.'
         message.sender=request.user.profile
         message.receiver=receiver
-        invite = Invite.objects.create(team=team, sender=request.user.profile, receiver=receiver, is_apply=True)
+        invite = Invite.objects.create(team=team, sender=request.user.profile, receiver=receiver, is_apply=True, message=message)
         message.is_invite = True
         message.invite_url = 'http://'+str(get_current_site(request).domain)+str(reverse('message:accept', kwargs={'pk': invite.pk}))
         message.save()
