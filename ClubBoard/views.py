@@ -10,9 +10,9 @@ from .forms import Create_PostForm
 #@login_required
 def blog_detail(request, pk):
     blog_detail = Create_Post.objects.get(pk=pk)
+    Create_Post.objects.filter(id=pk).update(view_count=blog_detail.view_count + 1)
     ctx = {
         'detail': blog_detail,
-        'did_like_article': blog_detail.profile_set.filter(pk=request.user.pk).exists(),
     }
 
     return render(request, 'ClubBoard/blog_detail.html', ctx)

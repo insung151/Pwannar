@@ -97,7 +97,7 @@ def detail_list(request):
         'selected_language_pk': selected_language_pk,
         'selected_project_pk': selected_project_pk,
     }
-    return render (request, 'planning_list.html', ctx)
+    return render(request, 'planning_list.html', ctx)
 
 def detail_list_html(request):
     selected_language_pk = eval(request.GET.get('selected_language_pk') or '[]')
@@ -147,6 +147,7 @@ def detail_list_html(request):
     return render(request, 'detail_list.html', ctx)
 
 def alphabet(request):
+
     selected_detail_list = request.POST.getlist('selected_detail_list[]')
     unordered_detail_list = Planning.objects.none()
 
@@ -181,14 +182,14 @@ def detail(request, pk):
 
 @login_required
 def create(request):
-    form = PlanningCreateForm(request.user.profile, request.POST or None)
+
+    form = PlanningCreateForm(request.user.profile, request.POST or None, request.FILES or None,)
     if request.method == "POST" and form.is_valid():
         article = form.save(commit=False)
         article.author = request.user
 
         article.save()
         form.save_m2m()
-
         return redirect(reverse('planningboard:detail', kwargs={'pk': article.pk}))
     ctx = {
         'form': form,

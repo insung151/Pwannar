@@ -37,8 +37,9 @@ class Create_Post(models.Model):
         related_name='club_board_article_liked_set',
     )
 
-    image = models.ImageField(upload_to='blog/%Y/%m/%d/', null=True, blank=True, verbose_name='동아리 포스터', height_field=100, width_field=50)
+    image = models.ImageField(upload_to='blog/%Y/%m/%d/', null=True, blank=True, verbose_name='동아리 포스터')
 
+    view_count = models.IntegerField(default=0, null=True)
 
     def image_url(self):
         if self.image:
