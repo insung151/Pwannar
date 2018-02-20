@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form method = "POST">
+<form method = "POST" enctype="multipart/form-data">
   {% csrf_token %}
   {{ form.as_p }}
   <button type = "submit" style="display:block;">제출하기</button>
@@ -22,7 +22,8 @@ $('.date_picker').pickadate({
     clear: 'Clear',
     close: 'Ok',
     closeOnSelect: false, // Close upon selecting a date,
-    format:'yyyy-mm-dd'
+    format:'yyyy-mm-dd',
+    min: Date.now()
 });
 
   $('select[name="region"]').change(function () {
@@ -34,7 +35,8 @@ $('.date_picker').pickadate({
               $('select[name="subregion"]').append(r);
               $('select').material_select();
           })
-  })
+  });
+  $('#id_recruiting_number').parent().addClass('range-field')
 </script>
 {% endblock %}
 

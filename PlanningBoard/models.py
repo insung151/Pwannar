@@ -66,7 +66,7 @@ class Planning(models.Model):
     title = models.CharField(max_length=20, verbose_name='제목', null=True)
     author = models.ForeignKey(User, verbose_name='글쓴이', on_delete=models.CASCADE, related_name='planning_set')
     recruiting_period = models.DateField(blank=True, null=True)
-    recruting_number = models.IntegerField(blank=True, null=True)
+    recruiting_number = models.IntegerField(blank=True, null=True)
     image = models.ImageField(upload_to='planning/%Y/%m/%d/', blank=True, null=True,)
     description = models.TextField(blank=True, null=True, verbose_name='설명')
 
