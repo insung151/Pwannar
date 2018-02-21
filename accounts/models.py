@@ -18,9 +18,9 @@ class Profile(models.Model):
     bio = models.TextField(max_length=500, blank=True, null=True)
     history = models.TextField(blank=True, null=True)
 
-    like_planning = models.ManyToManyField('PlanningBoard.Planning')
-    like_club = models.ManyToManyField('ClubBoard.Create_Post')
-    like_info = models.ManyToManyField('InformationBoard.Info_Article')
+    like_planning = models.ManyToManyField('PlanningBoard.Planning', null=True, blank=True)
+    like_club = models.ManyToManyField('ClubBoard.Create_Post', null=True, blank=True)
+    like_info = models.ManyToManyField('InformationBoard.Info_Article', null=True, blank=True)
 
     def image_url(self):
         if self.image:
