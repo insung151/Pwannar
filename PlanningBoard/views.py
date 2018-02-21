@@ -7,8 +7,6 @@ from django.shortcuts import (
     )
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from django.http import HttpResponse
-
 
 from .models import (
     Planning,
@@ -24,7 +22,7 @@ from .forms import (
     CommentForm
     )
 
-# Create your views here.
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 # 목록
 def detail_list(request):
@@ -85,8 +83,32 @@ def detail_list(request):
             selected_province_pk = Tag_Subregion.objects.get(pk=selected_city_pk[0]).region.pk
         selected_region_all = None
 
+    PAGE_ROW_COUNT = 5
+    PAGE_DISPLAY_COUNT = 5
+
+    paginator = Paginator(detail_list, PAGE_ROW_COUNT)
+    pageNum = request.GET.get('pageNum')
+    totalPageCount = paginator.num_pages
+    try:
+        detail_list = paginator.page(pageNum)
+    except PageNotAnInteger:
+        detail_list = paginator.page(1)
+        pageNum = 1
+    except EmptyPage:
+        detail_list = paginator.page(paginator.num_pages)
+        pageNum = paginator.num_pages
+
+    pageNum = int(pageNum)
+
+    startPageNum = int(1+((pageNum-1)/PAGE_DISPLAY_COUNT)*PAGE_DISPLAY_COUNT)
+    endPageNum = int(startPageNum+PAGE_DISPLAY_COUNT-1)
+    if totalPageCount < endPageNum:
+        endPageNum = totalPageCount
+
+    bottomPages = range(startPageNum, endPageNum+1)
+
     ctx = {
-        'detail_list': detail_list.order_by('-created_at'),
+        'detail_list': detail_list,
         'province_list': Tag_Region.objects.all(),
         'region_list': Tag_Subregion.objects.all(),
         'project_list': Tag_Project.objects.all(),
@@ -96,6 +118,11 @@ def detail_list(request):
         'selected_region_all': selected_region_all,
         'selected_language_pk': selected_language_pk,
         'selected_project_pk': selected_project_pk,
+        'pageNum': pageNum,
+        'bottomPages': bottomPages,
+        'totalPageCount': totalPageCount,
+        'startPageNum': startPageNum,
+        'endPageNum': endPageNum,
     }
     return render(request, 'planning_list.html', ctx)
 
