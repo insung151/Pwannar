@@ -103,30 +103,6 @@
   </form>
   <a id="create_button" href="{% url 'planningboard:create' %}" class="waves-effect waves-light btn">글쓰기</a>
 
-<div class="page_display" style="text-align: center;">
-    {% load mathfilters %}
-
-    {% if startPageNum != 1 %}
-        <a href="/board/planning/list?pageNum={{startPageNum | sub:1}}">[이전]</a>
-    {% else %}
-        <a href="javascript:" class="muted">[이전]</a>
-    {% endif %}
-
-    {% for i in bottomPages %}
-        {% if i == pageNum %}
-            <a class="active" href="/board/planning/list?pageNum={{ i }}">{{ i }}</a>
-        {% else %}
-            <a href="/board/planning/list?pageNum={{ i }}">{{ i }}</a>
-        {% endif %}
-    {% endfor %}
-
-    {% if endPageNum < totalPageCount %}
-        <a href="/board/planning/list?pageNum={{endPageNum | add:1}}">[다음]</a>
-    {% else %}
-        <a href="javascript:" class="muted">[다음]</a>
-    {% endif %}
-</div>
-
 <script>
 
 $(document).ready(function() {
@@ -256,6 +232,28 @@ $('#recent').click(function(e){
     })
 });
 
-
 </script>
+<div class="page_display" style="text-align: center;">
+    {% load mathfilters %}
+
+    {% if startPageNum != 1 %}
+        <a href="/board/planning/list?pageNum={{startPageNum | sub:1}}">[이전]</a>
+    {% else %}
+        <a href="javascript:" class="muted">[이전]</a>
+    {% endif %}
+
+    {% for i in bottomPages %}
+        {% if i == pageNum %}
+            <a class="active" href="/board/planning/list?pageNum={{ i }}">{{ i }}</a>
+        {% else %}
+            <a href="/board/planning/list?pageNum={{ i }}">{{ i }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if endPageNum < totalPageCount %}
+        <a href="/board/planning/list?pageNum={{endPageNum | add:1}}">[다음]</a>
+    {% else %}
+        <a href="javascript:" class="muted">[다음]</a>
+    {% endif %}
+</div>
 {% endblock %}
