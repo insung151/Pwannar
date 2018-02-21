@@ -196,6 +196,7 @@ def create(request):
         'subregion':Tag_Subregion.objects.all()
     }
     return render (request, 'create.html', ctx)
+
 def delete(request, pk):
     if request.method == "POST":
         detail = get_object_or_404(Planning, pk=pk)
@@ -224,6 +225,7 @@ def get_subregion(request, pk):
         subregion_list = Tag_Region.objects.get(pk=pk).get_sebregion()
         return render(request, 'subregion.html',{'subregion_list': subregion_list})
 
+
 def like(request, pk):
     if request.method == "POST":
         detail = get_object_or_404(Planning, pk=pk)
@@ -240,8 +242,7 @@ def like(request, pk):
     else:
         return HttpResponse(status=400)
 
-        print(subregion_list)
-        return render(request, 'subregion.html',{'subregion_list': subregion_list})
+
 
 def comment_create(request, detail_pk):
 

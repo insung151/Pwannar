@@ -7,3 +7,11 @@ img{
     width: 300px;
     height:300px;
 }
+
+.sorting:hover{
+    color: #9fc3e0;
+}
+
+.sorting .active {
+
+}
