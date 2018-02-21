@@ -33,20 +33,25 @@
 <a href="#" id="{{ language.pk }}" class="chip">{{ language.name }}</a>
 {% endfor %}
   <div id="like_button_wrapper" style="width: 50px; border:1px solid black">
-    <a id="like_button2" href="{% url 'planningboard:like' detail.pk %}">
+    <a id="like_button" href="{% url 'planningboard:like' detail.pk %}">
     {% include 'like_button.html' %}
     </a>
     <script>
-      $('#like_button2').click(function (e) {
+      $('#like_button').click(function (e) {
       var self = $(this);
       var url = self.attr('href');
-      $.post(url)
-          .done(function(r){
-              self.html(r);
-          })
-          .fail(function () {
-              alert('오류가 발생했습니다.');
-          });
+      {% if request.user.is_authenticated %}
+          $.post(url)
+              .done(function(r){
+                  self.html(r);
+              })
+              .fail(function () {
+                  alert('오류가 발생했습니다.');
+              });
+      {% else %}
+          alert('로그인이 필요합니다.');
+          window.location.replace('{% url 'accounts:signin' %}'+'?next={{ request.path }}');
+      {% endif %}
       return false;
     });
     </script>

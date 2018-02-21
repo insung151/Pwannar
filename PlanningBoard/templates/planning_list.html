@@ -1,84 +1,106 @@
-{% extends 'base.html' %}
-{% block content %}
 
-  <form method="POST" action="{% url 'planningboard:alphabet' %}">
-  {% csrf_token %}
-    <button type="submit" id="alphabet" class='btn'>가나다순 정렬</button>
-  </form>
-  <form method="POST" action="{% url 'planningboard:recent' %}">
-  {% csrf_token %}
-    <button type="submit" id="recent" class="btn">최신순 정렬</button>
-  </form>
+{% extends 'base.html' %}
+{%load static%}
+{% block content %}
+{% block staticcss %}
+  <link href="{% static 'css/board.css' %}" rel="stylesheet">
+{% endblock %}
 
   <div id="search_table">
+
   <div class="region_category" style="border: 1px solid black">
 
-  <div id="region_title">
-    <p>지역</p>
-  </div>
 
-  <div id="province_cateogory">
-    <select name="province" id="province">
-    <option value="" disabled selected>지역</option>
-    {% for province in province_list %}
-      <option value="{{ province.pk }}" id="{{ province.pk }}_province">{{ province.name }}</option>
-    {% endfor %}
-    </select>
-  </div>
 
 <form id="tag_search_form" method="POST">
 {% csrf_token %}
+<div class="row">
+    <div class="col s12">
+      <ul class="tabs">
+        <li class="tab col s3"><a class ='activate' href="#local">지역</a></li>
+        <li class="tab col s3"><a href="#language">프로젝트</a></li>
+        <li class="tab col s3"><a href="#project">언어</a></li>
+      </ul>
+    </div>
+    <div id="local" class="col s12">
+      <div id="region_title">
+        <p>지역</p>
+      </div>
+      <div id="province_cateogory">
+        <select name="province" id="province">
+          <option value="" disabled selected>지역</option>
+          {% for province in province_list %}
+            <option value="{{ province.pk }}" id="{{ province.pk }}_province">{{ province.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
 
-  <div id="city_category" >
-    {% for province in province_list %}
-      <div class="{{ province.pk }}_city hide">
-        <input type="checkbox" id="all_{{ province.pk }}" name="city_all" value="{{ province.pk }}">
-        <label for="all_{{ province.pk }}">전체선택</label>
+      <div id="city_category" >
+        {% for province in province_list %}
+          <div class="{{ province.pk }}_city hide">
+            <input type="checkbox" id="all_{{ province.pk }}" name="city_all" value="{{ province.pk }}">
+            <label for="all_{{ province.pk }}">전체선택</label>
+          </div>
+          {% for city in province.subregions.all %}
+            <div  class="{{ province.pk }}_city hide" style="display: inline-block; width: 150px">
+              <input type="checkbox" id="{{ city.pk }}_city" name="city" value="{{ city.pk }}">
+              <label for="{{ city.pk }}_city">{{ city }}</label>
+            </div>
+          {% endfor %}
+        {% endfor %}
       </div>
-      {% for city in province.subregions.all %}
-      <div class="{{ province.pk }}_city hide" style="display: inline-block;">
-        <input type="checkbox" id="{{ city.pk }}_city" name="city" value="{{ city.pk }}">
-        <label for="{{ city.pk }}_city">{{ city }}</label>
+
+
+    </div>
+    <div id="language" class="col s12">
+      <div class="language_category">
+        <div id="language_title">
+          <p>언어</p>
+        </div>
+        <div id="language_category">
+          <input type="checkbox" id="language_all" name="language_all" value="all">
+          <label for="language_all">전체선택</label>
+          {% for language in language_list %}
+            <div class="{{ language.pk }}_language">
+              <input type="checkbox" id="language_{{ language.pk }}" name="language" value="{{ language.pk }}">
+              <label for="language_{{ language.pk }}">{{ language }}</label>
+            </div>
+          {% endfor %}
+        </div>
       </div>
-      {% endfor %}
-    {% endfor %}
+    </div>
+    <div id="project" class="col s12">
+      <div class="project_category">
+        <div id="project_title">
+          <p>프로젝트</p>
+        </div>
+        <div id="project_category">
+          <input type="checkbox" id="project_all" name="project_all" value="all">
+          <label for="project_all">전체선택</label>
+          {% for project in project_list %}
+            <div class="{{ project.pk }}_project">
+              <input type="checkbox" id="project_{{ project.pk }}" name="project" value="{{ project.pk }}">
+              <label for="project_{{ project.pk }}">{{ project }}</label>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="language_category">
-    <div id="language_title">
-      <p>언어</p>
-    </div>
-    <div id="language_category">
-      <input type="checkbox" id="language_all" name="language_all" value="all">
-      <label for="language_all">전체선택</label>
-    {% for language in language_list %}
-      <div class="{{ language.pk }}_language">
-        <input type="checkbox" id="language_{{ language.pk }}" name="language" value="{{ language.pk }}">
-        <label for="language_{{ language.pk }}">{{ language }}</label>
-      </div>
-    {% endfor %}
-    </div>
-  </div>
 
-  <div class="project_category">
-    <div id="project_title">
-      <p>프로젝트</p>
-    </div>
-    <div id="project_category">
-    <input type="checkbox" id="project_all" name="project_all" value="all">
-    <label for="project_all">전체선택</label>
-    {% for project in project_list %}
-      <div class="{{ project.pk }}_project">
-        <input type="checkbox" id="project_{{ project.pk }}" name="project" value="{{ project.pk }}">
-        <label for="project_{{ project.pk }}">{{ project }}</label>
-      </div>
-    {% endfor %}
-    </div>
-  </div>
-  <button id="search_button" type="submit">검색</button>
+  <button id="search_button" type="submit" class="waves-effect waves-light btn">검색</button>
 </form>
   </div>
 </div>
+  <form method="POST" action="{% url 'planningboard:alphabet' %}">
+  {% csrf_token %}
+    <button type="submit" id="alphabet" class='sorting'>가나다순 정렬</button>
+  </form>
+  <form method="POST" action="{% url 'planningboard:recent' %}">
+  {% csrf_token %}
+    <button type="submit" id="recent" class="sorting">최신순 정렬</button>
+  </form>
   <a id="create_button" href="{% url 'planningboard:create' %}" class="waves-effect waves-light btn">글쓰기</a>
 
 <script>
@@ -155,24 +177,26 @@ $('#project_all').click(function () {
 })
 </script>
   <div id="detail_list">
-      <ul class="collection">
+      <ul class="">
   {% for detail in detail_list %}
-    <li id="{{ detail.pk }}" class="collection-item avatar">
+    <li id="{{ detail.pk }}" class="">
       <a href = "{% url 'planningboard:detail' detail.pk %}">
-        <img src = "{{ detail.image_url }}" alt="" style="width: 50px; height: 50px">
+        <img src = "{{ detail.image_url }}" alt="" style="width: 50px; height: 50px; display: inline-block">
         <a href = "{% url 'planningboard:detail' detail.pk %}">
-          <span class="title">{{ detail.title }}/{{ detail.created_at }}</span>
+          <p class="title" style="color: black; font-weight: bold; font-size: 17px">{{ detail.title }}</p>
         </a>
         <p>{{ detail.author }}</p>
       </a>
     </li>
-  {% endfor %}
+      {% endfor %}
       </ul>
   </div>
+
+
 <script>
 
   var details = document.getElementsByClassName("collection-item avatar");
-  var selected_detail_list = []
+  var selected_detail_list = [];
   for(var i=0; i < details.length; i++){
     selected_detail_list.push(details[i].id);
   }
