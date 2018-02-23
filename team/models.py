@@ -35,5 +35,6 @@ class Project(models.Model):
     project_name = models.CharField(max_length=20)
     project_description = models.TextField(blank=True, null=True)
 
+    created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return "%s 팀의 %s" % (self.team.team_name, self.project_name)

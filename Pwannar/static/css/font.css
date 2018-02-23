@@ -1,0 +1,19 @@
+@font-face {
+    font-family: NanumBarunPen;
+    src: url('font/NanumBarunpenR.ttf')format('truetype');
+}
+
+@font-face{
+    font-family: 맨발의청춘R;
+    src: url('font/210 맨발의청춘R.ttf')format('truetype');
+}
+
+@font-face{
+  font-family: tvN즐거운이야기B;
+  src: url('font/tvN 즐거운이야기 Bold.ttf')format('truetype');
+}
+
+@font-face{
+    font-family: NanumBarunGothic;
+    src: url('font/NanumBarunGothic.ttf')format('truetype');
+}

@@ -1,0 +1,85 @@
+.mainintro-container img{
+    display: block;
+    margin: auto;
+    height: 90px;
+}
+.mainintro_title img {
+    width: 70%;
+    height: 70%;
+}
+.mainintro_title {
+    padding-top: 30px;
+}
+.mainintro_box img {
+    padding: 20px 0px;
+    width: 25%;
+    height: 25%;
+}
+.mainintro_box p {
+    width: 70%;
+    padding: 10px 0px;
+    margin: auto;
+    font-family: NanumBarunPen;
+    text-align: left;
+}
+.mainintro_box p span {
+    font-size: 120%;
+    font-weight: bold;
+}
+.mainintro_inner_box p{
+    text-align: center;
+}
+
+.subintro-container img{
+    display: block;
+    margin: auto;
+    height: 90px;
+}
+.subintro_title {
+    padding-top: 30px;
+}
+.subintro_title img {
+    margin: auto;
+    width: 70%;
+    height: 70%;
+}
+.subintro-container div.row{
+    padding-top: 20px;
+}
+.subintro_box img {
+    display: block;
+    margin: auto;
+    height: 50%;
+    width: 50%;
+}
+.subintro_inner_box {
+    text-align: center;
+}
+.subintro_title h5 {
+    font-family: 맨발의청춘R;
+    font-size: 20px;
+}
+.subintro_title p {
+    font-family: NanumBarunPen;
+    font-size: 17px;
+}
+.subintro_title h5 span {
+    color: green;
+}
+.subintro_description {
+    width: 70%;
+    margin: auto;
+    background-color: rgba(128, 128, 128, 0.13);
+    padding: 1px 5px
+}
+.subintro_description p {
+    font-family: NanumBarunPen;
+}
+
+.btn {
+    margin: auto;
+    display: block;
+    width: 20%;
+    background-color: green;
+    font-family: NanumBarunPen;
+}
