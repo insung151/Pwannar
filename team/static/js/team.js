@@ -14,16 +14,16 @@ $(document).ready(function(){
     });
 });
 
-$("#project_delete_form").submit(function(e){
-    e.preventDefault();
+// $("#project_delete_form").submit(function(e){
+//     e.preventDefault();
 
-    var url = '{% url "team:projectlist" %}'
+//     var url = '{% url "team:projectlist" %}'
 
-    $.post(url)
-        .done(function(r){
-            $('project_list').remove(r);
-        })
-        .fail(function(r){
-            alert('에러발생')
-        })
-})
+//     $.post(url)
+//         .done(function(r){
+//             $('project_list').remove(r);
+//         })
+//         .fail(function(r){
+//             alert('에러발생')
+//         })
+// })
