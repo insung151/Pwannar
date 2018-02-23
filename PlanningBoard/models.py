@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.conf import settings
@@ -85,8 +87,15 @@ class Planning(models.Model):
             image_url = self.image.url
         else:
             image_url = '/static/img/default_img.png'
-
         return image_url
+
+    # for django template
+    def is_today(self):
+        return datetime.date.today() == (self.updated_at + datetime.timedelta(hours=9)).date()
+
+    def remain_days(self):
+        return (self.recruiting_period-datetime.date.today()).days
+
 
 class Comment(models.Model):
     detail = models.ForeignKey(

@@ -83,7 +83,8 @@ def detail_list(request):
             selected_province_pk = Tag_Subregion.objects.get(pk=selected_city_pk[0]).region.pk
         selected_region_all = None
 
-    PAGE_ROW_COUNT = 5
+    detail_list = detail_list.order_by('-updated_at')
+    PAGE_ROW_COUNT = 6
     PAGE_DISPLAY_COUNT = 5
 
     paginator = Paginator(detail_list, PAGE_ROW_COUNT)
@@ -171,6 +172,7 @@ def detail_list_html(request):
         'selected_language_pk': selected_language_pk,
         'selected_project_pk': selected_project_pk,
     }
+
     return render(request, 'detail_list.html', ctx)
 
 def alphabet(request):
@@ -213,7 +215,6 @@ def create(request):
     if request.method == "POST" and form.is_valid():
         article = form.save(commit=False)
         article.author = request.user
-
         article.save()
         form.save_m2m()
         return redirect(reverse('planningboard:detail', kwargs={'pk': article.pk}))
@@ -234,7 +235,7 @@ def delete(request, pk):
 
 def update(request, pk):
     detail = get_object_or_404(Planning, pk=pk)
-    form = PlanningCreateForm(request.POST or None, instance=detail)
+    form = PlanningCreateForm(request.user.profile, request.POST or None, instance=detail)
     if request.method == "POST" and form.is_valid():
        new_form = form.save(commit=False)
        # new_form.author = request.user

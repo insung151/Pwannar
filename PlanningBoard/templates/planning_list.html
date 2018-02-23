@@ -2,13 +2,13 @@
 {% extends 'base.html' %}
 {%load static%}
 {% block content %}
-{% block staticcss %}
-  <link href="{% static 'css/board.css' %}" rel="stylesheet">
-{% endblock %}
+  <link href="{% static 'css/board.css' %}?ver=1" rel="stylesheet">
+{% block staticcss %}{% endblock %}
 
-  <div id="search_table">
 
-  <div class="region_category" style="border: 1px solid black">
+  <div id="search_table" style="margin-top: 15px">
+
+  <div class="region_category">
 
 
 
@@ -17,16 +17,13 @@
 <div class="row">
     <div class="col s12">
       <ul class="tabs">
-        <li class="tab col s3"><a class ='activate' href="#local">지역</a></li>
-        <li class="tab col s3"><a href="#language">프로젝트</a></li>
-        <li class="tab col s3"><a href="#project">언어</a></li>
+        <li class="tab col s4" ><a class ='activate' href="#local">지역</a></li>
+        <li class="tab col s4"><a href="#language">언어</a></li>
+        <li class="tab col s4"><a href="#project">프로젝트</a></li>
       </ul>
     </div>
     <div id="local" class="col s12">
-      <div id="region_title">
-        <p>지역</p>
-      </div>
-      <div id="province_cateogory">
+      <div id="province_cateogory" style="margin:10px">
         <select name="province" id="province">
           <option value="" disabled selected>지역</option>
           {% for province in province_list %}
@@ -35,7 +32,7 @@
         </select>
       </div>
 
-      <div id="city_category" >
+      <div id="city_category" style="margin: 10px">
         {% for province in province_list %}
           <div class="{{ province.pk }}_city hide">
             <input type="checkbox" id="all_{{ province.pk }}" name="city_all" value="{{ province.pk }}">
@@ -53,10 +50,7 @@
 
     </div>
     <div id="language" class="col s12">
-      <div class="language_category">
-        <div id="language_title">
-          <p>언어</p>
-        </div>
+      <div class="language_category" style="margin:10px">
         <div id="language_category">
           <input type="checkbox" id="language_all" name="language_all" value="all">
           <label for="language_all">전체선택</label>
@@ -69,11 +63,8 @@
         </div>
       </div>
     </div>
-    <div id="project" class="col s12">
+    <div id="project" class="col s12" style="margin:10px">
       <div class="project_category">
-        <div id="project_title">
-          <p>프로젝트</p>
-        </div>
         <div id="project_category">
           <input type="checkbox" id="project_all" name="project_all" value="all">
           <label for="project_all">전체선택</label>
@@ -86,22 +77,11 @@
         </div>
       </div>
     </div>
+    <button id="search_button" type="submit" class="waves-effect waves-light btn" style="float: right; margin-right: 20px;">검색</button>
   </div>
-
-
-  <button id="search_button" type="submit" class="waves-effect waves-light btn">검색</button>
 </form>
   </div>
 </div>
-  <form method="POST" action="{% url 'planningboard:alphabet' %}">
-  {% csrf_token %}
-    <button type="submit" id="alphabet" class='sorting'>가나다순 정렬</button>
-  </form>
-  <form method="POST" action="{% url 'planningboard:recent' %}">
-  {% csrf_token %}
-    <button type="submit" id="recent" class="sorting">최신순 정렬</button>
-  </form>
-  <a id="create_button" href="{% url 'planningboard:create' %}" class="waves-effect waves-light btn">글쓰기</a>
 
 <script>
 
@@ -111,6 +91,15 @@ $(document).ready(function() {
     {% for city in selected_city_pk %}
         $('#{{ city }}_city').get(0).checked=true;
     {% endfor %}
+
+    {% for language in selected_language_pk %}
+        $('#language_{{ language }}').get(0).checked=true;
+    {% endfor %}
+
+    {% for project in selected_project_pk %}
+        $('#project_{{ project }}').get(0).checked=true;
+    {% endfor %}
+
     if ({{ selected_province_pk }} != 0){
         $('select').change();
     }
@@ -176,22 +165,39 @@ $('#project_all').click(function () {
     }
 })
 </script>
-  <div id="detail_list">
-      <ul class="">
-  {% for detail in detail_list %}
-    <li id="{{ detail.pk }}" class="">
-      <a href = "{% url 'planningboard:detail' detail.pk %}">
-        <img src = "{{ detail.image_url }}" alt="" style="width: 50px; height: 50px; display: inline-block">
-        <a href = "{% url 'planningboard:detail' detail.pk %}">
-          <p class="title" style="color: black; font-weight: bold; font-size: 17px">{{ detail.title }}</p>
-        </a>
-        <p>{{ detail.author }}</p>
-      </a>
-    </li>
-      {% endfor %}
-      </ul>
-  </div>
 
+
+<form method="POST" action="{% url 'planningboard:alphabet' %}">
+  {% csrf_token %}
+    <button type="submit" id="alphabet" class='sorting btn' style="float: right">가나다순 정렬</button>
+  </form>
+  <form method="POST" action="{% url 'planningboard:recent' %}">
+  {% csrf_token %}
+    <button type="submit" id="recent" class="sorting btn" style="float: right">최신순 정렬</button>
+  </form>
+
+
+<div class="detail_list_wrapper">
+  <ul>
+    {% for detail in detail_list %}
+      <li class="card_wrapper">
+        <a href="{% url 'planningboard:detail' detail.pk %}">
+          <div class="card">
+            <div class="card-image">
+              <img class="image" src="{{ detail.image_url }}">
+            </div>
+            <div class="card-content">
+              <a class="card-title" href="{% url 'planningboard:detail' detail.pk %}">{{ detail.title }}</a>
+              <a class = "card-author" href="{% url 'accounts:myinfo'  detail.author %}"><p>{{ detail.author }}</p></a>
+              <p class="card_recruiting_period">{% if detail.remain_days < 0  %}모집마감{% else %}D-{{ detail.remain_days }}{% endif %}</p>
+              <p class="card-recruiting_number">모집인원: {{ detail.recruiting_number }}명</p>
+            </div>
+          </div>
+        </a>
+      </>
+    {% endfor %}
+  </ul>
+</div>
 
 <script>
 
@@ -233,13 +239,12 @@ $('#recent').click(function(e){
 });
 
 </script>
+<a id="create_button" href="{% url 'planningboard:create' %}" class="waves-effect waves-light btn" style="float: right">글쓰기</a>
 <div class="page_display" style="text-align: center;">
     {% load mathfilters %}
 
     {% if startPageNum != 1 %}
         <a href="/board/planning/list?pageNum={{startPageNum | sub:1}}">[이전]</a>
-    {% else %}
-        <a href="javascript:" class="muted">[이전]</a>
     {% endif %}
 
     {% for i in bottomPages %}
@@ -252,8 +257,6 @@ $('#recent').click(function(e){
 
     {% if endPageNum < totalPageCount %}
         <a href="/board/planning/list?pageNum={{endPageNum | add:1}}">[다음]</a>
-    {% else %}
-        <a href="javascript:" class="muted">[다음]</a>
     {% endif %}
 </div>
 {% endblock %}

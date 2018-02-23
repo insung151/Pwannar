@@ -20,7 +20,6 @@ class Message(models.Model):
         return self.title
 
 class Invite(models.Model):
-    message = models.OneToOneField(Message, on_delete=models.CASCADE, null=True, blank=True, related_name='invite')
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='team_set',)
     sender = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='invite_sender_set')
     receiver = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='invite_receiver_set')
