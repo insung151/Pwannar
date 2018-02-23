@@ -1,5 +1,70 @@
-@import url(http://fonts.googleapis.com/earlyaccess/nanumbrushscript.css);
-@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
-@import url(http://fonts.googleapis.com/earlyaccess/nanummyeongjo.css);
-@import url(http://fonts.googleapis.com/earlyaccess/nanumpenscript.css);
+div.row {
+    margin-top: 20px;
+    background: #edf1ea;
+}
 
+div.image {
+    margin-top: 20px;
+}
+
+div.profile_content {
+    width:100%;
+    padding-left: 0px;
+    padding-right: 0px;
+
+}
+
+div.user_image{
+    display: inline-block;
+
+
+}
+div.user_info{
+    display: inline-block;
+    width: 67%;
+    height: 100%;
+    vertical-align: middle;
+
+}
+
+div.button_collection{
+    margin-top: 20px;
+}
+div.project{
+    margin-top: 20px;
+}
+
+
+h4#team_name{
+    font-size: 20px;
+    color: red;
+}
+
+div.doingproject{
+    display: inline-block;
+    background-color: #e4eae0;
+    width: 490px;
+    vertical-align: middle;
+    padding-top: 33px;
+    margin-top: 20px;
+
+
+
+}
+
+
+
+div.finishproject{
+    display: inline-block;
+    background-color: #e4eae0;
+    width: 490px;
+    vertical-align: middle;
+    padding-top: 33px;
+    margin-top: 20px;
+
+}
+
+div.team_member_list{
+    margin-top: 20px;
+
+}

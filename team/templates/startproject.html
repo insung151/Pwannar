@@ -2,7 +2,7 @@
 {% block content %}
 <form method="POST">
   {% csrf_token %}
-  {{ form.as_p }}
+  {{ form }}
   <button type="submit">시작하기</button>
 </form>
 {% endblock %}

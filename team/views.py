@@ -43,7 +43,9 @@ def manage_team(request, team_name):
 def delete_team(request, team_name):
     if request.method == "POST":
         team = get_object_or_404(Team, team_name=team_name)
-        team.delete()
+        team.is_activate = False
+        team.save()
+        team.project_set.filter(project_end=False).delete()
         return redirect(reverse(
             'accounts:myinfo',
             kwargs={'username': request.user.username}
@@ -81,9 +83,18 @@ def delete_project(request, pk):
     return render(request, 'projectlist.html')
 
 
-
-def finish_project(request):
-    pass
+def end_project(request, pk):
+    team = Project.objects.get(pk=pk).team
+    if request.method == "POST" and request.user.profile == Member.objects.get(team=team, leader=True).member:
+        team_project = get_object_or_404(Project, pk=pk)
+        team_project.project_end = True
+        team_project.save()
+        return redirect(reverse(
+            'team:manage_team',
+            kwargs={'team_name': request.user.profile.member_set.filter(team=team).get().team}
+        ))
+    else:
+        return HttpResponse(status=401)
 
 
 def manage_member(request):

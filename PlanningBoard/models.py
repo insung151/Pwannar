@@ -17,7 +17,7 @@ class Tag_Subregion(models.Model):
     name = models.CharField(max_length=20, blank=True, null=True,)
     region = models.ForeignKey(
         Tag_Region,
-        on_delete = models.CASCADE,
+        on_delete=models.CASCADE,
         null=True,
         related_name='subregions'
         )

@@ -14,5 +14,5 @@ urlpatterns = [
     path('profile/<str:username>/', views.myinfo, name='myinfo'),
     path('confirm/<str:username>/',views.confirm, name='confirm'),
     path('confirm/<str:username>/resend', views.resend, name='resend'),
-    path('favorites',views.favorites, name='favorites')
+    path('favorites',views.favorites, name='favorites'),
 ]

@@ -20,3 +20,7 @@ class ProjectForm(forms.ModelForm):
         model = Project
         fields = ('project_name', 'project_description')
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['project_description'].initial = '언어 : \nOS : \n'
+

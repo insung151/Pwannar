@@ -45,6 +45,4 @@ class SignUpProfileForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        exclude = ('user',)
-
-
+        exclude = ('user','like_planning', 'like_club', 'like_info')
