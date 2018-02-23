@@ -15,15 +15,15 @@
 
         </div>
     </div>
-    <div img src = "{{ detail.image_url }}">
+        <img src = "{{ detail.image_url }}">
         <p>제목: {{ detail.title }}</p>
         <p>글쓴이: {{ detail.author }}</p>
-        <p>모집마감일: {{ detail.due }}</p>
-        <p>모집인원: {{ detail.personnel }}</p>
+        <p>모집마감일: {{ detail.recruiting_period }}</p>
+        <p>모집인원: {{ detail.recruiting_number }}</p>
         <p>설명: {{ detail.explanation }}</p>
         <p>작성날짜: {{ detail.created_at }}</p>
         <p>최종수정날짜: {{ detail.updated_at }}</p>
-    </div>
+    <a href ="{{ detail.url }}">{{ detail.url }}</a>
 
   <div id="like_button_wrapper" style="width: 50px; border:1px solid black">
     <a id="like_button2" href="{% url 'informationboard:like' detail.pk %}">
@@ -48,8 +48,8 @@
     <a href="{% url 'InformationBoard:inform_list' %}" class="waves-effect waves-light btn">목록으로</a>
 
     <div style="float: right;">
-        <a href="{% url 'InformationBoard:inform_list' %}" class="waves-effect waves-light btn">수정</a>
-        <form id='article_delete_form' action="{% url 'InformationBoard:inform_list' %}" method="POST" style="display: inline-block;">
+        <a href="{% url 'InformationBoard:inform_edit' detail.pk %}" class="waves-effect waves-light btn">수정하기</a>
+        <form id='article_delete_form' action="{% url 'InformationBoard:inform_delete' detail.pk %}" method="POST" style="display: inline-block;">
             {% csrf_token %}
             <button type="submit" class="waves-effect waves-light btn">삭제</button>
         </form>
@@ -60,29 +60,6 @@
                 }
             });
         </script>
-    </div>
-
-    <div class="comment_area">
-        <h4>댓글</h4>
-        <form method="POST">
-            {% csrf_token %}
-            {{ comment_form.as_p }}
-            <button type="submit" class="waves-effect waves-light btn">작성</button>
-        </form>
-        {% if article.comment_set.exists %}
-        <ul>
-            {% for comment in article.comment_set.all %}
-            <li style="margin: 30px 0;">
-                <div style="font-size: 17px; font-weight: bold;"> <a href="{% url 'InformationBoard:inform_list' %}">{{ comment.author }}</a></div>
-                <div style="margin: 10px 0;">
-                    <span>{{ comment.content }}</span>
-                    <span>{{ comment.created_at|date:"Y.m.d h:i A"}}
-                    </span>
-                </div>
-            </li>
-            {% endfor %}
-        </ul>
-        {% endif %}
     </div>
 </div>
 {% endblock %}

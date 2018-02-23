@@ -3,7 +3,12 @@
 @import url(http://fonts.googleapis.com/earlyaccess/nanummyeongjo.css);
 @import url(http://fonts.googleapis.com/earlyaccess/nanumpenscript.css);
 
-
+.brand-logo {
+    width: 25%;
+}
+.brand-logo img {
+    padding: 10px 0px;
+}
 div#divfont {
     font-family: "Nanum Yeongjo";Nanum Yeongjo
     font-size: 80px;
@@ -23,7 +28,6 @@ nav#nav-content{
     display: block;
     margin-right: 50px;
 }
-
 
 body {
     display: flex;

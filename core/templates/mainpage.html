@@ -1,35 +1,247 @@
-{%extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
-{% block mainpage %}
-<div class="slider">
-  <ul class="slides">
-    <li>
-      <img src="{% static 'image/start.jpg'  %}">
-      <div class="caption center-align">
-        <h3>P.Wannar</h3>
-        <h5 class="light grey-text text-lighten-3">P.wannar는 코딩그룹 스터디 플랫폼 서비스입니다.</h5>
-      </div>
-    </li>
-    <li>
-      <img src="{% static 'image/coding.jpg' %}">
-      <div class="caption left-align">
-        <h5 class="light grey-text text-lighten-3">무슨말을 넣을까요?</h5>
-      </div>
-    </li>
-    <li>
-      <img src="{% static 'image/finish.jpg' %}">
-      <div class="caption right-align">
-        <h5 class="light grey-text text-lighten-3">무슨말을 넣을까요?</h5>
-      </div>
-    </li>
-    <li>
-      <img src="{% static 'image/finish2.jpg' %}">
-      <div class="caption center-align">
-        <h5 class="light grey-text text-lighten-3">무슨말을 넣을까요?</h5>
-      </div>
-    </li>
-  </ul>
+
+{% block staticcss %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/mainpage.css' %}?ver=1.01">
+<link rel="stylesheet" type="text/css" href="{% static 'css/mainpage_logined.css' %}?ver=1.01">
+<link rel="stylesheet" type="text/css" href="{% static 'css/mainpage_unlogined.css' %}?ver=1.03">
+{% endblock %}
+
+{% block content %}
+
+<div class="background_image">
+  <img src="{% static 'img/main_image.jpg' %}">
 </div>
-<section>
-</section>
+
+<div class="numcount-container">
+  <div class="num_title_box">
+    <h5 class="title">이번주 새로 등록된 게시글<span style="
+    float: right; font-size: 70%;">{{ monday }} 기준</span></h5>
+  </div>
+  <div class="row">
+      <div class="col l4 num_box">
+        <p><span class="count">{{ planningboard_count }}</span>개</p>
+        <div class="num_inner_box">
+          <h5>기획 게시판</h5>
+        </div>
+      </div>
+
+      <div class="col l4 num_box">
+        <p><span class="count">{{ clubboard_count }}</span>개</p>
+        <div class="num_inner_box">
+          <h5>동아리 게시판</h5>
+        </div>
+      </div>
+
+      <div class="col l4 num_box">
+        <p><span class="count">{{ infoboard_count }}</span>개</p>
+        <div class="num_inner_box">
+          <h5>대외정보 게시판</h5>
+        </div>
+      </div>
+  </div>
+</div>
+
+<script>
+  $('.count').each(function () {
+      $(this).prop('Counter',0).animate({
+          Counter: $(this).text()
+      }, {
+          duration: 1000,
+          easing: 'swing',
+          step: function (now) {
+              $(this).text(Math.ceil(now));
+          }
+      });
+  });
+  </script>
+
+{% if not user.is_authenticated %}
+<div class="not_authenticated">
+  <div class="mainintro-container">
+    <div class="mainintro_title">
+      <img src="{% static 'img/mainintro_title.jpg' %}">
+    </div>
+
+    <div class="row">
+      <div class="col l4 mainintro_box">
+        <img src="{% static 'img/mainintro_1.png' %}">
+        <div class="mainintro_inner_box">
+          <p>
+            <span>코딩 공부를 시작하셨나요?</span><br>
+            <br>
+            웹에는 영상과 자료가 넘쳐나지만,
+            혼자서 공부하긴 넘나<br>막막하지
+            않으신가요?
+          </p>
+        </div>
+      </div>
+
+
+
+      <div class="col l4 mainintro_box">
+        <img src="{% static 'img/mainintro_2.png' %}">
+        <div class="mainintro_inner_box">
+          <p>
+            <span>Don’t Worry, Do Pwannar</span><br>
+            <br>
+            코딩하는 사람들이 모여있는 ‘피워나’에서 사람들을 찾아보세요.<br>그 사람들과 함께 팀을 지어
+            실력을 길러보아요.
+          </p>
+        </div>
+      </div>
+
+
+
+      <div class="col l4 mainintro_box">
+        <img src="{% static 'img/mainintro_3.png' %}">
+        <div class="mainintro_inner_box">
+          <p>
+            <span>실력을 길러 능력자가 된 당신!</span><br>
+            <br>
+            그 실력을 피워나 새내기/비기너들을 위해 나누어보아요!
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<hr>
+
+  <div class="subintro-container">
+    <div class="subintro_title">
+      <img src="{% static 'img/subintro_title.png' %}">
+    </div>
+    <div class="row">
+
+       <div class="col l4 subintro_box">
+          <img src="{% static 'img/intro_box_image_1.jpg' %}">
+          <div class="subintro_inner_box">
+            <div class="subintro_title">
+              <h5>나만의 <span>코딩 메이트 찾기</span></h5>
+              <p> - 팀빌딩 - </p>
+            </div>
+            <div class="subintro_description">
+              <p>
+                코딩 공부를 같이 할 친구,<br>
+                프로젝트를 같이 할 친구가<br>
+                없으신가요?<br>
+                <br>
+                걱정은 넣어두세요!<br>
+                피워나의 ‘기획 게시판’에서<br>
+                프로젝트를 선택하고,<br>
+                '팀빌딩’으로 팀을 꾸리고,<br>
+                팀원들과 ‘쪽지’로 소통해요!
+                </p>
+            </div>
+          </div>
+        </div>
+
+
+       <div class="col l4 subintro_box">
+          <img src="{% static 'img/intro_box_image_2.jpg' %}">
+          <div class="subintro_inner_box">
+            <div class="subintro_title">
+              <h5><span>코딩 행사</span> 한 번에 확인하기</h5>
+              <p> - 대외정보 & 동아리 홍보 게시판 -</p>
+            </div>
+            <div class="subintro_description">
+              <p>
+                코딩 행사 정보 일일이 찾기,<br>
+                넘나 힘들지 않으신가요?<br>
+                <br>
+                걱정은 넣어두세요!<br>
+                ‘대외정보 게시판’과 ‘동아리 홍보 게시판’에서<br>
+                 공모전, 동아리, 인턴쉽 정보를<br>
+                 한 번에 확인해보세요!
+                </p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col l4 subintro_box">
+          <img src="{% static 'img/intro_box_image_3.jpg' %}">
+          <div class="subintro_inner_box">
+            <div class="subintro_title">
+              <h5>나만의 <span>프로젝트 관리자</span></h5>
+              <p> - 개인 프로필 - </p>
+            </div>
+            <div class="subintro_description">
+              <p>
+              내 프로젝트 활동을 관리하기<br>
+              너무 귀찮고 힘들다면!<br>
+              코딩에만 집중하고 싶다면!<br>
+              <br>
+              걱정은 넣어두세요!<br>
+              피워나의 ‘개인 프로필’에서<br>
+              당신의 프로젝트를<br>
+              모두 자동적으로 정리해드립니다!<br>
+              노 워리 노 페인
+              </p>
+            </div>
+          </div>
+        </div>
+
+    </div>
+  </div>
+
+  <a href="{% url 'accounts:create_user' %}" class="btn">가입하기</a>
+
+  <div style="padding-bottom: 10px">
+  </div>
+</div>
+{% elif request.user.is_authenticated %}
+<div class="authenticated">
+  <div class="row">
+
+    <div class="col s7 project_box">
+      <h5 style="margin: auto;">진행 중인 프로젝트</h5>
+
+      <div class="container project_box_content">
+        {% for project in project_list %}
+        <a href="{% url 'team:manage_team' project.team.team_name %}">
+          <p id="team_name" >{{ project.team }}</p>
+        </a>
+        <p id="project_title">{{ project.project_name }}</p>
+        <p id="created_at">{{ project.created_at|date:"Y.m.d"}}~</p>
+        <hr>
+        {% empty %}
+        <p class="empty_message">진행 중인 프로젝트가 없습니다.</p>
+        {% endfor %}
+
+        <a class="view_more" href="{% url 'accounts:myinfo' request.user.username %}">더보기</a>
+      </div>
+
+    </div>
+
+
+  <div class="col s1">
+  </div>
+
+    <div class="col s4 message_box">
+      <h5 style="margin: auto;">나의 쪽지</h5>
+
+      <div class="container message_box_content">
+        {% for message in message_list %}
+          <a href="{% url 'accounts:myinfo' message.sender %}">
+            <p id="sender">{{ message.sender }}</p>
+          </a>
+          <span id="send_time">{% if message.is_today %}{{ message.send_time|time:"H:i"}}{% else %}{{ message.send_time|date:"m.d"}}{% endif %}</span>
+        <a href="{% url 'message:message_detail' message.pk%}">
+          <p id="message_title">{{ message.title }}</p>
+        </a>
+        <hr>
+        <a class="view_more" href="#">더보기</a>
+        {% empty %}
+        <p class="empty_message">새로운 메시지가 없습니다.</p>
+        {% endfor %}
+      </div>
+
+    </div>
+
+  </div>
+</div>
+{% endif %}
+
 {% endblock %}

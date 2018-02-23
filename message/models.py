@@ -1,7 +1,7 @@
 from django.db import models
 from accounts.models import Profile
 from team.models import Team
-
+import datetime
 
 class Message(models.Model):
     sender = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='sender_set')
@@ -19,7 +19,11 @@ class Message(models.Model):
     def __str__(self):
         return self.title
 
+    def is_today(self):
+        return datetime.date.today() == (self.send_time + datetime.timedelta(hours=9)).date()
+
 class Invite(models.Model):
+    message = models.OneToOneField(Message, on_delete=models.CASCADE, null=True, blank=True, related_name='invite')
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='team_set',)
     sender = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='invite_sender_set')
     receiver = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='invite_receiver_set')

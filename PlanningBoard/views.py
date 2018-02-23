@@ -7,8 +7,6 @@ from django.shortcuts import (
     )
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from django.http import HttpResponse
-
 
 from .models import (
     Planning,
@@ -24,7 +22,7 @@ from .forms import (
     CommentForm
     )
 
-# Create your views here.
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 # 목록
 def detail_list(request):
@@ -85,8 +83,32 @@ def detail_list(request):
             selected_province_pk = Tag_Subregion.objects.get(pk=selected_city_pk[0]).region.pk
         selected_region_all = None
 
+    PAGE_ROW_COUNT = 5
+    PAGE_DISPLAY_COUNT = 5
+
+    paginator = Paginator(detail_list, PAGE_ROW_COUNT)
+    pageNum = request.GET.get('pageNum')
+    totalPageCount = paginator.num_pages
+    try:
+        detail_list = paginator.page(pageNum)
+    except PageNotAnInteger:
+        detail_list = paginator.page(1)
+        pageNum = 1
+    except EmptyPage:
+        detail_list = paginator.page(paginator.num_pages)
+        pageNum = paginator.num_pages
+
+    pageNum = int(pageNum)
+
+    startPageNum = int(1+((pageNum-1)/PAGE_DISPLAY_COUNT)*PAGE_DISPLAY_COUNT)
+    endPageNum = int(startPageNum+PAGE_DISPLAY_COUNT-1)
+    if totalPageCount < endPageNum:
+        endPageNum = totalPageCount
+
+    bottomPages = range(startPageNum, endPageNum+1)
+
     ctx = {
-        'detail_list': detail_list.order_by('-created_at'),
+        'detail_list': detail_list,
         'province_list': Tag_Region.objects.all(),
         'region_list': Tag_Subregion.objects.all(),
         'project_list': Tag_Project.objects.all(),
@@ -96,6 +118,11 @@ def detail_list(request):
         'selected_region_all': selected_region_all,
         'selected_language_pk': selected_language_pk,
         'selected_project_pk': selected_project_pk,
+        'pageNum': pageNum,
+        'bottomPages': bottomPages,
+        'totalPageCount': totalPageCount,
+        'startPageNum': startPageNum,
+        'endPageNum': endPageNum,
     }
     return render(request, 'planning_list.html', ctx)
 
@@ -182,7 +209,6 @@ def detail(request, pk):
 
 @login_required
 def create(request):
-
     form = PlanningCreateForm(request.user.profile, request.POST or None, request.FILES or None,)
     if request.method == "POST" and form.is_valid():
         article = form.save(commit=False)
@@ -198,6 +224,14 @@ def create(request):
     }
     return render (request, 'create.html', ctx)
 
+def delete(request, pk):
+    if request.method == "POST":
+        detail = get_object_or_404(Planning, pk=pk)
+        detail.delete()
+        return redirect(reverse('planningboard:list'))
+    else:
+        return HttpResponse(status=400)
+
 def update(request, pk):
     detail = get_object_or_404(Planning, pk=pk)
     form = PlanningCreateForm(request.POST or None, instance=detail)
@@ -206,16 +240,18 @@ def update(request, pk):
        # new_form.author = request.user
        # new_form.tag_set = request.user.tag_set.all()
        new_form.save()
+       form.save_m2m()
        return redirect(reverse('planningboard:detail', kwargs={'pk': pk}))
     ctx = {
         'form': form
     }
     return render(request, 'create.html', ctx)
 
-def get_subegion(request, pk):
+def get_subregion(request, pk):
     if request.method == "POST":
         subregion_list = Tag_Region.objects.get(pk=pk).get_sebregion()
         return render(request, 'subregion.html',{'subregion_list': subregion_list})
+
 
 def like(request, pk):
     if request.method == "POST":
@@ -233,8 +269,7 @@ def like(request, pk):
     else:
         return HttpResponse(status=400)
 
-        print(subregion_list)
-        return render(request, 'subregion.html',{'subregion_list': subregion_list})
+
 
 def comment_create(request, detail_pk):
 

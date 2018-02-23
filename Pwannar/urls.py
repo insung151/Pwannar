@@ -11,7 +11,7 @@ urlpatterns = [
     path('team/', include('team.urls', namespace='team')),
     path('board/planning/', include('PlanningBoard.urls', namespace='planningboard')),
     path('board/information/', include('InformationBoard.urls', namespace='informationboard')),
-    path('board/club/', include('ClubBoard.urls', namespace='cluboard'))
+    path('board/club/', include('ClubBoard.urls', namespace='clubboard'))
 ]
 
 if settings.DEBUG:

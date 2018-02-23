@@ -1,0 +1,64 @@
+.authenticated {
+    padding-top: 40px;
+}
+p{
+    color: black;
+}
+a p:hover{
+    color: #5ac543;
+}
+.project_box h5{
+    width: 80%;
+    background-color: rgba(128, 128, 128, 0.34);
+    font-family: tvN즐거운이야기B;
+    font-size: 200%;
+    text-align: center;
+    margin: 0;
+    padding: 2px;
+    border-radius: 2px;
+}
+.project_box_content p {
+    display: inline-block;
+    font-family: NanumBarunGothic;
+    margin: 0;
+    padding: 3px;
+}
+p#created_at {
+    float: right;
+}
+
+.message_box {
+
+
+}
+.message_box h5{
+    width: 80%;
+    background-color: rgba(128, 128, 128, 0.34);
+    font-family: tvN즐거운이야기B;
+    font-size: 200%;
+    text-align: center;
+    margin: 0;
+    padding: 2px;
+    border-radius: 2px;
+}
+#sender{
+    display: inline;
+    margin: 4px 0px;
+}
+#send_time {
+    float: right;
+}
+#message_title{
+    margin: 4px 0px;
+}
+.empty_message {
+    text-align: center;
+}
+hr {
+    margin: 2px;
+}
+
+
+.view_more{
+    float: right;
+}

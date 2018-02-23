@@ -10,8 +10,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
   {% block staticcss %}{% endblock %}
   <link href="{% static 'css/filter.css' %}" rel="stylesheet">
-  <link href="{% static 'css/fix.css' %}?ver=1" rel="stylesheet" />
-
+  <link href="{% static 'css/fix.css' %}?ver=1.04" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/header_footer.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/font.css' %}">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
@@ -38,11 +39,8 @@
         </li>
         <li><a href="{% url 'accounts:myinfo' request.user.username %}">프로필 보기</a></li>
         <li class="divider"></li>
-        <li><a href="{% url 'message:messages' %}">받은메세지함</a></li>
-        <li><a href="{% url 'message:send_messages' %}">보낸메세지함</a></li>
-        <li class="divider"></li>
-        <li><a href="{% url 'core:board_list' %}">동아리 게시판</a></li>
-        <li class="divider"></li>
+        <li><a href="{% url 'message:messages' %}">받은 쪽지함</a></li>
+        <li><a href="{% url 'message:send_messages' %}">보낸 쪽지함</a></li>
         <li><a href="{% url 'accounts:signout' %}">Log out..</a></li>
         {% else %}
         <li><a href="{% url 'accounts:signin' %}">로그인</a></li>
@@ -50,10 +48,13 @@
         {% endif %}
       </ul>
       <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
+
       <!--Desktop-->
-      <a href="{% url 'core:mainpage' %}" class="brand-logo" id="brand-logo-fixed">P.Wannar<i class="small material-icons">local_florist</i></a>
+      {# <img id="brand_logo" src="{% static 'images/brand_logo.png' %}"> #}
+      <a href="{% url 'core:mainpage' %}" class="brand-logo" id="brand-logo-fixed"><img id="brand_logo" src="{% static 'images/brand_logo_white.png' %}" style="width: 78%;"></a>
       <div id="ul-fixed">
         <ul id="nav-mobile" class="right hide-on-med-and-down">
+          {% if user.is_authenticated %}
           <li>
             <a href="{% url 'planningboard:list' %}">기획 게시판</a>
           </li>
@@ -61,38 +62,22 @@
             <a href="{% url 'ClubBoard:blog_list' %}">동아리 게시판</a>
           </li>
           <li>
-            <a href="{% url 'InformationBoard:inform_list' %}">정보 게시판</a>
+            <a href="{% url 'InformationBoard:inform_list' %}">대외정보 게시판</a>
           </li>
-          {% if user.is_authenticated %}
-            <li>
-              <a class="dropdown-button" href="#!" data-activates="dropdown1">{{ request.user }} <i class="material-icons right">arrow_drop_down</i></a>
-                <ul id="dropdown1" class="dropdown-content">
-                  <li><a href="{% url 'accounts:myinfo' request.user.username %}">프로필보기</a></li>
-                  <li class="divider"></li>
-                  <li><a href="{% url 'message:messages' %}">받은메세지함</a></li>
-                  <li class="divider"></li>
-                  <li><a href="{% url 'message:send_messages' %}">보낸메세지함</a></li>
-                  <li class="divider"></li>
-                  <li><a href="{% url 'accounts:signout' %}">로그아웃</a><li>
-                </ul>
-                <ul id="dropdown1" class="dropdown-content active" style="width: 130px;">
-                  <li><a href="{% url 'accounts:myinfo' request.user.username %}">프로필보기</a></li>
-                  <li class="divider"></li>
-                  <li><a href="{% url 'message:messages' %}">받은메세지함</a></li>
-                  <li class="divider"></li>
-                  <li><a href="{% url 'message:send_messages' %}">보낸메세지함</a></li>
-                  <li class="divider"></li>
-                  <li><a href="{% url 'accounts:signout' %}">로그아웃</a><li>
-                </ul>
-            </li>
+          <li>
+            <a class="dropdown-button" href="#!" data-activates="dropdown1">{{ request.user }} <i class="material-icons right">arrow_drop_down</i></a>
+            <ul id="dropdown1" class="dropdown-content">
+              <li><a href="{% url 'accounts:myinfo' request.user.username %}">프로필</a></li>
+              <li><a href="{% url 'message:messages' %}">받은쪽지</a></li>
+              <li><a href="{% url 'message:send_messages' %}">보낸쪽지</a></li>
+              <li><a href="{% url 'accounts:signout' %}">로그아웃</a><li>
+            </ul>
+          </li>
           {% else %}
             <li>
               <a href="{% url 'accounts:signin' %}">로그인</a>
             <li>
               <a href="{% url 'accounts:create_user' %}">가입하기</a>
-            </li>
-            <li>
-              <a class="dropdown-button" href="#!" data-activates="dropdown1"><i class="material-icons right">arrow_drop_down</i></a>
             </li>
           {% endif %}
         </ul>
