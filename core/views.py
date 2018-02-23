@@ -2,12 +2,48 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
+import datetime
 from .models import Article, Tag
 from .forms import ArticleForm, CommentForm
+from ClubBoard.models import Create_Post
+from InformationBoard.models import Info_Article
+from PlanningBoard.models import Planning
+from team.models import Team, Project
+from message.models import Message
 
 
 def MainPage(request):
-    return render(request, 'mainpage.html')
+    now = datetime.datetime.now()
+    seven_days = datetime.timedelta(weeks=1)
+    for i in range(0, 7):
+        target_day = now - datetime.timedelta(days=i)
+        if target_day.weekday() == 0 :
+            monday = target_day.replace(hour=0, minute=0, second=0, microsecond=0)
+    planningboard_count = Planning.objects.filter(created_at__range=(monday, monday+seven_days)).count()
+    clubboard_count = Create_Post.objects.filter(created_at__range=(monday, monday+seven_days)).count()
+    infoboard_count = Info_Article.objects.filter(created_at__range=(monday, monday+seven_days)).count()
+
+
+    if request.user.pk != None:
+        project_list = Project.objects.filter(team__member__member=request.user.profile)
+        message_list = Message.objects.filter(receiver = request.user.profile)
+    else:
+        project_list = []
+        message_list = []
+    new_message_list = []
+    for message in message_list:
+        if message.is_read == False:
+            new_message_list.append(message)
+
+    ctx = {
+        'monday': monday,
+        'planningboard_count': planningboard_count,
+        'clubboard_count': clubboard_count,
+        'infoboard_count': infoboard_count,
+        'project_list': project_list,
+        'message_list': new_message_list,
+    }
+    return render(request, 'mainpage.html', ctx)
 
 
 @login_required
