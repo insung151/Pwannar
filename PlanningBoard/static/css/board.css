@@ -3,9 +3,11 @@ li.list_set {
     padding: 10px;
 }
 
-img{
-    width: 300px;
-    height:300px;
+.card-image{
+    height: 250px;
+}
+img.image{
+    height: 100%;
 }
 
 .sorting:hover{
@@ -14,4 +16,63 @@ img{
 
 .sorting .active {
 
+}
+
+.detail_list_wrapper{
+    margin: auto;
+    margin-top: 50px;
+}
+
+.detail_list_wrapper a{
+    left:50%;
+    right: 50%;
+}
+
+.card_wrapper{
+    width: 250px;
+    height: 500px   ;
+    display: inline-block;
+    margin-left: 30px;
+    margin-right:30px;
+}
+
+
+.card-content{
+    position: relative;
+}
+
+
+.card-author{
+    float: right;
+}
+
+.card_author p {
+    color: gray !important;
+}
+
+
+
+#search_table{
+    border-radius: 10px;
+    padding: 15px;
+    background-color: #ecf7ff;
+}
+
+li.indicator{
+    background-color: #afa2fe !important;
+}
+
+li.tab a{
+    font-weight: bold;
+    color: darkblue !important;
+}
+
+a.card-title{
+    height: 64px !important;
+    max-height: 65px!important;
+    overflow: hidden!important;
+    text-overflow: ellipsis!important;
+    color: black;
+    font-weight: 400!important;
+    font-size: large !important;
 }
