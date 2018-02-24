@@ -103,5 +103,6 @@ ENV/
 *.pyc
 __pycache__
 db.sqlite3
-media
+media/
 .DS_Store
+

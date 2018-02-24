@@ -1,12 +1,37 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
+  <link href="{% static 'css/message.css' %}" rel="stylesheet">
+  {% block staticcss %}{% endblock %}
+
+<div class="message_info">
   {% if request.user.profile == message.receiver %}
-    <h2>보낸이 : {{ message.sender }}</h2><br>
+    <div>
+      <p style="display: inline-block;">보낸 사람 :</p>
+      <ul id="sender_dropdown" class="dropdown-content">
+        <li><a href="{% url 'accounts:myinfo' message.sender %}">프로필 보기</a></li>
+        <li><a href="{% url 'message:message_send' message.sender %}">메세지 보내기</a></li>
+      </ul>
+      <a class="dropdown-button" href="#!" data-activates="sender_dropdown" style="display: inline-block; min-width: 150px">{{ message.sender }}</a>
+    </div>
   {% elif request.user.profile == message.sender %}
-    <h2>받는 사람 : {{ message.receiver }}</h2><br>
+    <div>
+      <p>받는 사람 :</p>
+      <ul id="recevier_dropdown" class="dropdown-content">
+        <li><a href="{% url 'accounts:myinfo' message.receiver %}">프로필 보기</a></li>
+        <li><a href="{% url 'message:message_send' message.receiver %}">메세지 보내기</a></li>
+        <a class="dropdown-button" href="#!" data-activates="receiver_dropdown" style="display: inline-block; min-width: 150px">{{ message.receiver }}</a>
+      </ul>
+    </div>
   {% endif %}
-  <h3>보낸시간 : {{ message.send_time|date:"Y.m.d"}}</h3><br>
-  <p>{{ message.content }}</p>
+  <p>보낸시간 : {{ message.send_time|date:"Y.m.d H:i"}}</p><br>
+</div>
+
+
+  <hr>
+  <div class="message_content">
+    {{ message.content }}
+  </div>
   <form method="post" action="{% url 'message:message_delete' message.pk %}" >
   {% csrf_token %}
     <button type="submit">삭제</button>
