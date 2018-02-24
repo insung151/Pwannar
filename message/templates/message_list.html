@@ -9,13 +9,17 @@
     </tr>
     </thead>
     <tbody>
-    {% for message in messages %}
-      <tr>
-        <td><a href="{% url 'accounts:myinfo' message.sender %}">{{ message.sender }}</a></td>
-        <td><a href="{% url 'message:message_detail' message.pk %}">{{ message.title }}</a></td>
-        <td>{{ message.send_time }}</td>
-      </tr>
-    {% endfor %}
+    {% if messages %}
+      {% for message in messages %}
+        <tr>
+          <td><a href="{% url 'accounts:myinfo' message.sender %}">{{ message.sender }}</a></td>
+          <td><a href="{% url 'message:message_detail' message.pk %}">{{ message.title }}</a></td>
+          <td>{{ message.send_time }}</td>
+        </tr>
+      {% endfor %}
+    {% else %}
+      <tr><td>메세지가 없습니다.</td></tr>
+    {% endif %}
     </tbody>
   </table>
 {% endblock %}

@@ -136,7 +136,8 @@ STATIC_ROOT = 'static'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'accounts', 'static'),
     os.path.join(BASE_DIR, 'Pwannar', 'static'),
-    os.path.join(BASE_DIR, 'PlanningBoard', 'static')
+    os.path.join(BASE_DIR, 'PlanningBoard', 'static'),
+    os.path.join(BASE_DIR, 'message', 'static')
                     ]
 
 MEDIA_URL = '/media/'
