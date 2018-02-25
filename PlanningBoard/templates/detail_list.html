@@ -1,12 +1,18 @@
-  <ul class="collection">
+<ul>
   {% for detail in detail_list %}
-    <li id="{{ detail.pk }}" class="collection-item avatar">
-      <a href = "{% url 'planningboard:detail' detail.pk %}">
-        <img src = "{{ detail.image_url }}" alt="" style="width: 50px; height: 50px">
-        <a href = "{% url 'planningboard:detail' detail.pk %}">
-          <span class="title">{{ detail.title }}/{{ detail.created_at }}</span>
-        </a>
-        <p>{{ detail.author }}</p>
+    <li id="{{detail.pk}}" class="card_wrapper">
+      <a href="{% url 'planningboard:detail' detail.pk %}">
+        <div class="card">
+          <div class="card-image">
+            <img class="image" src="{{ detail.image_url }}">
+          </div>
+          <div class="card-content">
+            <a class="card-title" href="{% url 'planningboard:detail' detail.pk %}">{{ detail.title }}</a>
+            <a class = "card-author" href="{% url 'accounts:myinfo'  detail.author %}"><p>{{ detail.author }}</p></a>
+            <p class="card_recruiting_period">{% if detail.remain_days < 0  %}모집마감{% else %}D-{{ detail.remain_days }}{% endif %}</p>
+            <p class="card-recruiting_number">모집인원: {{ detail.recruiting_number }}명</p>
+          </div>
+        </div>
       </a>
     </li>
   {% endfor %}

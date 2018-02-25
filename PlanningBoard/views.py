@@ -176,8 +176,9 @@ def detail_list_html(request):
     return render(request, 'detail_list.html', ctx)
 
 def alphabet(request):
-
+    print('done')
     selected_detail_list = request.POST.getlist('selected_detail_list[]')
+    print(selected_detail_list)
     unordered_detail_list = Planning.objects.none()
 
     for detail_pk in selected_detail_list:
