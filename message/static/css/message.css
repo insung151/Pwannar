@@ -1,3 +1,9 @@
 .message_content{
     min-height: 400px;
 }
+
+
+.btn{
+    margin: 3px;
+    background-color: #616161;
+}
