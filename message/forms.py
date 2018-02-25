@@ -7,7 +7,10 @@ from .models import Message
 class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
-        exclude = ('sender', 'receiver', 'send_time', 'sender_visibility', 'receiver_visibility', 'read_time', 'is_read')
+        exclude = (
+            'sender', 'receiver', 'send_time', 'sender_visibility', 'receiver_visibility', 'read_time', 'is_read',
+            'invite_url', 'is_invite',
+        )
 
 class InviteForm(forms.ModelForm):
     class Meta:
