@@ -6,33 +6,34 @@
         window.open(url, "", "width=1000px, height=800px");
     }
   </script>
-
+<div style="font-family: NanumBarunPen;">
 <!-- 본문영역 -->
-<div style="margin-top: 15px; float: right;">
+<div style="margin-top: 30px; float: right;">
   {% if request.user == detail.author %}
-    <button onclick="location.href='{% url 'planningboard:update' detail.pk %}'">수정하기</button>
+    <button onclick="location.href='{% url 'planningboard:update' detail.pk %}'" class="waves-effect waves-light btn" style="background-color: white; color: black; border: solid 1.5px #9e9b9b;">수정하기</button>
   {% endif %}
 
   {% if request.user == detail.author %}
-  <form id='delete_form' action="{% url 'planningboard:delete' detail.pk %}" method="POST" style="display: inline-block;">
+  <form id='delete_form' action="{% url 'planningboard:delete' detail.pk %}" method="POST" style="display: inline-block; margin-left: 10px">
     {% csrf_token %}
-  <button type="submit" class="">삭제하기</button>
+  <button type="submit" class="waves-effect waves-light btn" style="background-color: white; color: black; border: solid 1.5px #9e9b9b;">삭제하기</button>
   </form>
   {% endif %}
 </div>
-<div style="text-align: center; font-size: 40px; font-weight: strong; margin-top: 30px;">
+</div>
+<div style="text-align: center; font-size: 40px; font-weight: strong; margin-top: 100px; margin-bottom: 30px; font-family: 맨발의청춘R;">
   {{ detail.title }}
 </div>
-<div style="margin-bottom: 15px;">
+<div style="margin-bottom: 15px; font-family: NanumBarunPen;">
   <div class="row l12">
       <div class="col l6 valign-wrapper" style="text-align:center; height:331px;">
-        <img src = "{{ detail.image_url }}" style="width: 70%; margin:auto;">
-
+        <img src = "{{ detail.image_url }}" style="width: auto; height: auto; max-width: 370px; max-height: 370px; margin:auto;">
       </div>
     <div class="col l6 valign-wrapper" style="font-size: 20px; height:331px;">
-      <p>저자: {{ detail.author }}<br>
+      <p>글쓴이: {{ detail.author }}<br>
       모집기간: {{ detail.recruiting_period }}<br>
-      모집인원: {{ detail.recruiting_number }}<br>
+      모집인원: {{ detail.recruiting_number }}<br><br>
+
       {% for subregion in detail.subregion.all %}
         <a href="{% url 'planningboard:list' %}?selected_city_pk=[{{ subregion.pk }}]" id="{{ subregion.pk }}_subregion_name"class="chip">{{ subregion.name }}</a>
       {% endfor %}<br>
@@ -46,8 +47,7 @@
     </div>
   </div>
 </div>
-  <hr>
-<div style="word-break:break-all;">
+<div style="word-break:break-all; margin-top: 70px; font-family: NanumBarunPen;">
   {{ detail.description }}
 </div>
   <div id="region_tag_wrapper" style="float: left;">
@@ -63,9 +63,8 @@
   </div>
 </div>
 
-<div>
-  <div id="like_button_wrapper" style="text-align: center;">
-    <a id="like_button" href="{% url 'planningboard:like' detail.pk %}">
+<div style="text-align: center; margin-top: 10px;">
+  <a id="like_button" href="{% url 'planningboard:like' detail.pk %}" style="position: relative; top: 7px; right: 7px;">
       {% include 'like_button.html' %}
     </a>
       <script>
@@ -87,14 +86,11 @@
         return false;
       });
       </script>
-  </div>
-</div>
-<div style="text-align: center;">
-  <div style="margin-top: 10px;">
   <button class="waves-effect waves-light btn" style="background: gray;
     padding-left: 35px;
     padding-right: 35px;
-    border: solid 1.5px #c8c5c5;"
+    border: solid 1.5px #c8c5c5;
+    font-family: NanumBarunPen;"
     onclick="message('{% url 'message:apply' detail.team.pk %}')">신청하기</button>
 
   <script>
@@ -109,15 +105,19 @@
     padding-left: 35px;
     padding-right: 35px;
     border: solid 1.5px gray;
-    color: black">목록으로</a>
-  </div>
+    color: black;
+    font-family: NanumBarunPen;">목록으로</a>
   </div>
 </div>
-
+<div style="padding: 0 210px; float: left;">
 <form id="comment_form" action="{% url 'planningboard:comment_create' detail.pk %}" method="POST">
 {% csrf_token %}
+  <div style="width: 900px;">
     {{ comment_form.as_p }}
-  <button type="submit" class="waves-effect waves-light btn">댓글</button>
+  </div>
+  <div style="float: left; display: inline;">
+  <button type="submit" class="waves-effect waves-light btn" style="background-color: white; color: black; border: solid 1.5px #9e9b9b; font-family: NanumBarunPen;">입력</button>
+  </div>
 </form>
 
 <script>
@@ -126,13 +126,13 @@ $('#comment_form').submit(function(e){
   e.preventDefault();
 
   var url = "{% url 'planningboard:comment_create' detail.pk %}";
-  var data = {content: $('input[name="content"]').val() };
+  var data = {content: $('textarea[name="content"]').val() };
   console.log(url);
 
   $.post(url, data)
     .done(function(r){
       $('#comment_list').prepend(r);
-      $('input[name="content"]').val('');
+      $('textarea[name="content"]').val('');
     })
     .fail(function(){
       alert('오류가 발생했습니다.');
@@ -141,16 +141,17 @@ $('#comment_form').submit(function(e){
 
 </script>
 
-<ul id="comment_list">
-  <div style="text-align: center; font-size: 20px; margin-bottom: 10px;">전체 댓글</div>
+<ul id="comment_list" style="background-color: #f7d7f052; font-family: NanumBarunPen;">
+  <div style="text-align: center; font-size: 20px; padding-top: 15px; margin-bottom: 15px;">전체 댓글</div>
+  <hr />
   {% for comment in comment_list %}
-    <li style="padding-top: 15px; padding-left: 10px; margin-bottom: 15px; border-top: 1px solid gray;">
+    <li style="padding-top: 15px; padding-left: 10px; padding-bottom: 20px; border-bottom: 1px solid gray;">
       {% include 'comment_list.html' %}
     </li>
   {% endfor %}
 </ul>
-
-<!—댓글 영역 끝—>
+</div>
+</div>
 
 {% endblock %}
 
