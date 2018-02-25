@@ -1,3 +1,10 @@
-<p>{{ comment.author }}</p>
-<p>{{ comment.content }}</p>
-<p>{{ comment.created_at }}</p>
+<div>
+    <a href="{% url 'accounts:myinfo' comment.author %}" style="color: black; font-size: 18px;">
+    {{ comment.author }}</a>
+</div>
+<div style="margin: 1px 0;">
+    {{ comment.content }}
+</div>
+<div style="color: gray;">
+    {{ comment.created_at|date:"Y.m.d A h:i"}}
+</div>

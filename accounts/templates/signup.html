@@ -1,21 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h4>Sign up</h4>
+  <div style="margin: 20px 0; font-size: 30px; font-weight: bold; text-align: center; font-family: NanumBarunPen;">
+    PWANNAR에 오신 것을 환영합니다!
+  </div>
   <form method="post">
     {% csrf_token %}
-    {% for field in form %}
-      <span id="span-fixed">
+    <div style="font-family: NanumBarunPen; font-size: 16px; width: 50%; margin: 0 auto;">
+      {% for field in form %}
+        <span>
         {{ field.label_tag }}<br>
-        {% if field.help_text %}
-          <small style="color: grey">{{ field.help_text }}</small>
-        {% endif %}
+          {% if field.help_text %}
+            <small style="color: grey">{{ field.help_text }}</small>
+          {% endif %}
         {{ field }}
-        {% for error in field.errors %}
-          <p style="color: red">{{ error }}</p>
-        {% endfor %}
-      </span>
-    {% endfor %}
-    <button type="submit">Sign up</button>
+          {% for error in field.errors %}
+            <p style="color: red">{{ error }}</p>
+          {% endfor %}
+        </span>
+      {% endfor %}
+    </div>
+    <div style="text-align: center;">
+      <button type="submit" class="waves-effect waves-light btn" style="color: white; background-color: darkgreen; padding: 5px 140px; padding-bottom: 40px; font-family: NanumBarunPen; margin-bottom: 25px;">회원가입</button>
+    </div>
   </form>
 {% endblock %}
