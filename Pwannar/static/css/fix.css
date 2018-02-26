@@ -4,10 +4,11 @@
 @import url(http://fonts.googleapis.com/earlyaccess/nanumpenscript.css);
 
 .brand-logo {
-    width: 25%;
+    max-height: 60px!important;
 }
 .brand-logo img {
-    padding: 10px 0px;
+    height: 58px;
+    padding: 3px 0px;
 }
 div#divfont {
     font-family: "Nanum Yeongjo";Nanum Yeongjo
