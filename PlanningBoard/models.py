@@ -110,7 +110,7 @@ class Comment(models.Model):
         )
 
     created_at = models.DateTimeField(auto_now_add=True)
-    content = models.CharField(max_length=100)
+    content = models.TextField(max_length=100, verbose_name='댓글')
 
     def __str__(self):
         return self.content

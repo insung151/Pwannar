@@ -9,14 +9,12 @@
 
 {% block staticjs %}
 <script src="{% static 'js/planning_list.js' %}"></script>
-{% endblock %}
-
-  <div id="search_table" style="margin-top: 15px">
+{% endblock %}  <div id="search_table" style="margin-top: 15px">
 
   <div class="region_category">
 
 
-
+<div>
 <form id="tag_search_form" method="POST">
 {% csrf_token %}
 <div class="row" style="margin-bottom:0;">
@@ -82,7 +80,9 @@
         </div>
       </div>
     </div>
+
     <button id="search_button" type="submit" class="waves-effect waves-light btn" style="float: right; margin-right: 20px; width:10%;">검색</button>
+
   </div>
 </form>
   </div>
@@ -170,12 +170,13 @@ $('#project_all').click(function () {
     }
 })
 </script>
-
+</div>
 
 <form method="POST" style="float: right; margin-top:10px">
   {% csrf_token %}
   <input class="with-gap activate" name="group1" type="radio" id="recent"/>
   <label for="recent">최신순 정렬</label>
+
 
   <input class="with-gap" name="group1" type="radio" id="alphabet"/>
   <label for="alphabet">가나다순 정렬</label>
@@ -234,22 +235,23 @@ $('#alphabet').click(function(){
 
 <a id="create_button" href="{% url 'planningboard:create' %}" class="waves-effect waves-light btn" style="float: right">글쓰기</a>
 <div class="page_display" style="text-align: center;">
+
     {% load mathfilters %}
 
     {% if startPageNum != 1 %}
-        <a href="/board/planning/list?pageNum={{startPageNum | sub:1}}">[이전]</a>
+        <a href="/board/planning/list?pageNum={{startPageNum | sub:1}}" style="color: gray;">[이전]</a>
     {% endif %}
 
     {% for i in bottomPages %}
         {% if i == pageNum %}
-            <a class="active" href="/board/planning/list?pageNum={{ i }}">{{ i }}</a>
+            <a class="active" href="/board/planning/list?pageNum={{ i }}" style="color: gray;">{{ i }}</a>
         {% else %}
-            <a href="/board/planning/list?pageNum={{ i }}">{{ i }}</a>
+            <a href="/board/planning/list?pageNum={{ i }}" style="color: gray;">{{ i }}</a>
         {% endif %}
     {% endfor %}
 
     {% if endPageNum < totalPageCount %}
-        <a href="/board/planning/list?pageNum={{endPageNum | add:1}}">[다음]</a>
+        <a href="/board/planning/list?pageNum={{endPageNum | add:1}}" style="color: gray;">[다음]</a>
     {% endif %}
 </div>
 {% endblock %}

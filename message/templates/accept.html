@@ -1,8 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
+{% if invite.is_apply %}
+  <h2>{{ invite.sender }}님이 {{ invite.team.team_name }}에 지원했습니다.</h2>
+{% else %}
+  <h2>{{ invite.sender }}님이 {{ invite.team.team_name }}으로 초대했습니다.</h2>
 
-  <h2>{{ invite.sender }}님이 {{ invite.team.team_name }}으로 초대합니다.</h2>
+{% endif %}
   <form method="post" action="{% url 'message:join' invite.pk %}">
+    {% csrf_token %}
     <button type="submit">수락</button>
   </form>
 {% endblock %}

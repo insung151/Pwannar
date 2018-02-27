@@ -46,7 +46,7 @@ def detail_list(request):
         if request.POST.get('project_all'):
             url += '&selected_project_pk=' + str(list(map(lambda x: x.get('pk'),Tag_Project.objects.values('pk'))))
         else:
-            url += '&selected_project_pk' + str(selected_project_pk)
+            url += '&selected_project_pk=' + str(selected_project_pk)
 
         return redirect(url)
 

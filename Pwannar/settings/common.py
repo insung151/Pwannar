@@ -15,7 +15,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 # Quick-start development settings - unsuitable for production
@@ -136,7 +136,8 @@ STATIC_ROOT = 'static'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'accounts', 'static'),
     os.path.join(BASE_DIR, 'Pwannar', 'static'),
-    os.path.join(BASE_DIR, 'PlanningBoard', 'static')
+    os.path.join(BASE_DIR, 'PlanningBoard', 'static'),
+    os.path.join(BASE_DIR, 'message', 'static')
                     ]
 
 MEDIA_URL = '/media/'

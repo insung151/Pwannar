@@ -1,12 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
-<div style="text-align: center; margin-top: 100px;">
-  <h2>메세지 전송</h2><br>
-  <h3>받는 사람: {{ receiver }}</h3>
+<div style="margin-top: 20px;">
+  <p>쪽지 쓰기</p>
+  <p>받는 사람: {{ receiver }}</p>
+  <hr><br>
   <form id="message_send" method="POST">
-    {% csrf_token %}
-    {{form.as_p}}
     <button type="submit">전송</button>
+    {% csrf_token %}
+    <div style="margin-bottom: 20px">
+      {{form.as_p}}
+    </div>
   </form>
   <script>
     $('#message_send').submit(function(e) {
