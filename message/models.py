@@ -13,7 +13,7 @@ class Message(models.Model):
     sender_visibility = models.BooleanField(default=True)
     read_time = models.DateTimeField(auto_now=True)
     is_read = models.BooleanField(default=False)
-    is_invite = models.BooleanField(default=True)  # 초대 메세지인지 아닌지
+    is_invite = models.BooleanField(default=False)  # 초대 메세지인지 아닌지
     invite_url = models.URLField(max_length=200, null=True, blank=True)  # 수락 url
 
     def __str__(self):
