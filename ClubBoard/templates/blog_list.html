@@ -9,14 +9,14 @@
 {% endblock %}
 
 {% block staticjs %}
-<script src="{% static 'js/information_list.js' %}"></script>
+<script src="{% static 'js/planning_list.js' %}"></script>
 {% endblock %}
 
 <div style="margin: 20px 0; font-size: 30px; font-weight: bold; text-align: center; font-family: NanumBarunPen;">
-    대외정보 게시판
+    동아리 게시판
 </div>
 <div>
-  <a id="create_button" href="{% url 'InformationBoard:inform_create' %}" class="waves-effect waves-light btn" style="
+  <a id="create_button" href="{% url 'ClubBoard:blog_create' %}" class="waves-effect waves-light btn" style="
   width: 130px;
   background-color: green!important;
   display: absolute;
@@ -24,27 +24,29 @@
   margin-top: 10px;
   margin-left: 10px;">글쓰기</a>
 </div>
+
 <div style="">
-{% include 'inform_detail_list.html' %}
+{% include 'blog_detail_list.html' %}
 </div>
+
 <div class="page_display" style="text-align: center; margin-bottom: 20px;">
 
     {% load mathfilters %}
 
     {% if startPageNum != 1 %}
-        <a href="/board/information/list?pageNum={{startPageNum | sub:1}}" style="color: gray;">[이전]</a>
+        <a href="/board/club/list?pageNum={{startPageNum | sub:1}}" style="color: gray;">[이전]</a>
     {% endif %}
 
     {% for i in bottomPages %}
         {% if i == pageNum %}
-            <a class="active" href="/board/information/list?pageNum={{ i }}" style="color: gray;">{{ i }}</a>
+            <a class="active" href="/board/planning/list?pageNum={{ i }}" style="color: gray;">{{ i }}</a>
         {% else %}
-            <a href="/board/information/list?pageNum={{ i }}" style="color: gray;">{{ i }}</a>
+            <a href="/board/club/list?pageNum={{ i }}" style="color: gray;">{{ i }}</a>
         {% endif %}
     {% endfor %}
 
     {% if endPageNum < totalPageCount %}
-        <a href="/board/information/list?pageNum={{endPageNum | add:1}}" style="color: gray;">[다음]</a>
+        <a href="/board/club/list?pageNum={{endPageNum | add:1}}" style="color: gray;">[다음]</a>
     {% endif %}
 </div>
 {% endblock %}

@@ -9,7 +9,13 @@
 
 {% block staticjs %}
 <script src="{% static 'js/planning_list.js' %}"></script>
-{% endblock %}  <div id="search_table" style="margin-top: 15px">
+{% endblock %}
+
+<div style="margin: 20px 0; font-size: 30px; font-weight: bold; text-align: center; font-family: NanumBarunPen;">
+  기획 게시판
+</div>
+
+<div id="search_table" style="margin-top: 30px; font-family: NanumBarunPen;">
 
   <div class="region_category">
 
@@ -171,17 +177,20 @@ $('#project_all').click(function () {
 })
 </script>
 </div>
+<div style="margin-top: 20px;">
+  <div>
+    <a id="create_button" href="{% url 'planningboard:create' %}" class="waves-effect waves-light btn" style="float: left; margin-top: 10px; margin-left: 10px;">글쓰기</a>
+  </div>
+  <form method="POST" style="float: right; margin-top:10px; font-family: NanumBarunPen;">
+      {% csrf_token %}
+    <input class="with-gap activate" name="group1" type="radio" id="recent"/>
+    <label for="recent">최신순 정렬</label>
 
-<form method="POST" style="float: right; margin-top:10px">
-  {% csrf_token %}
-  <input class="with-gap activate" name="group1" type="radio" id="recent"/>
-  <label for="recent">최신순 정렬</label>
+    <input class="with-gap" name="group1" type="radio" id="alphabet"/>
+    <label for="alphabet">가나다순 정렬</label>
 
-
-  <input class="with-gap" name="group1" type="radio" id="alphabet"/>
-  <label for="alphabet">가나다순 정렬</label>
-
-</form>
+  </form>
+</div>
 
 <script>
 $('#recent').click()
@@ -233,8 +242,7 @@ $('#alphabet').click(function(){
     {% include 'detail_list.html' %}
 </div>
 
-<a id="create_button" href="{% url 'planningboard:create' %}" class="waves-effect waves-light btn" style="float: right">글쓰기</a>
-<div class="page_display" style="text-align: center;">
+<div class="page_display" style="text-align: center; margin-bottom: 20px;">
 
     {% load mathfilters %}
 

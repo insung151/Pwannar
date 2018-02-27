@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.urls import reverse
 from django.conf import settings
 from django.contrib.auth.models import User
-#from datetime import datetime
+import datetime
 
 
 class Create_Post(models.Model):
@@ -13,10 +13,12 @@ class Create_Post(models.Model):
         null=True,
     )
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='글쓴이')
-    club_name = models.TextField(verbose_name='동아리 이름', default='예시: 피로그래밍')
+    club_name = models.TextField(verbose_name='동아리 이름', help_text='예시: 피로그래밍'
+    )
     recruiting_period = models.DateTimeField(
         null = True, blank = True,
-        verbose_name='모집 마감일 #YYYY-MM-DD 형식으로 입력하세요.'
+        verbose_name='모집 마감일',
+        help_text='#YYYY-MM-DD 형식으로 입력하세요.'
     )
     recruiting_number = models.CharField(
         max_length=30,
@@ -40,6 +42,12 @@ class Create_Post(models.Model):
     image = models.ImageField(upload_to='blog/%Y/%m/%d/', null=True, blank=True, verbose_name='동아리 포스터')
 
     view_count = models.IntegerField(default=0, null=True)
+
+    def is_today(self):
+        return datetime.date.today() == (self.updated_at + datetime.timedelta(hours=9)).date()
+
+    def remain_days(self):
+        return (self.recruiting_period-datetime.date.today()).days
 
     def image_url(self):
         if self.image:

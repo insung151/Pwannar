@@ -4,6 +4,7 @@ from django.http import HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
 from .models import Info_Article
 from .forms import ArticleForm
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 def MainPage(request):
@@ -26,8 +27,36 @@ def inform_detail(request, pk):
 def inform_list(request):
     inform_list = Info_Article.objects.all()
 
+    PAGE_ROW_COUNT = 5
+    PAGE_DISPLAY_COUNT = 5
+
+    paginator = Paginator(inform_list, PAGE_ROW_COUNT)
+    pageNum = request.GET.get('pageNum')
+    totalPageCount = paginator.num_pages
+    try:
+        inform_list = paginator.page(pageNum)
+    except PageNotAnInteger:
+        inform_list = paginator.page(1)
+        pageNum = 1
+    except EmptyPage:
+        inform_list = paginator.page(paginator.num_pages)
+        pageNum = paginator.num_pages
+
+    pageNum = int(pageNum)
+
+    startPageNum = int(1+((pageNum-1)/PAGE_DISPLAY_COUNT)*PAGE_DISPLAY_COUNT)
+    endPageNum = int(startPageNum+PAGE_DISPLAY_COUNT-1)
+    if totalPageCount < endPageNum:
+        endPageNum = totalPageCount
+
+    bottomPages = range(startPageNum, endPageNum+1)
     ctx = {
         'inform_list': inform_list,
+        'pageNum': pageNum,
+        'bottomPages': bottomPages,
+        'totalPageCount': totalPageCount,
+        'startPageNum': startPageNum,
+        'endPageNum': endPageNum
     }
     return render(request, 'inform_list.html', ctx)
 

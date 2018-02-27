@@ -1,10 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<style>
+
+p {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 10px 0;
+    display: inline-block;
+
+}
+
+</style>
+
+<div style="margin: 20px 0; font-size: 30px; font-weight: bold; text-align: center; font-family: NanumBarunPen;">
+    기획 게시판
+</div>
+
 <form method = "POST" enctype="multipart/form-data">
   {% csrf_token %}
-  {{ form.as_p }}
-  <button type = "submit" style="display:block;">제출하기</button>
+  <div style="margin: 20px 0; font-family: NanumBarunPen; border: 1px solid #ccc; border-radius: 4px;">
+    {{ form.as_p }}
+    <div style="text-align: center;">
+      <button type="submit" class="waves-effect waves-light btn" style="color: white; background-color: darkgreen; padding: 5px 140px; padding-bottom: 40px; font-family: NanumBarunPen; margin-bottom: 25px;">작성하기</button>
+    </div>
+  </div>
 </form>
 
 
