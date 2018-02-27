@@ -2,16 +2,16 @@
 {% extends 'base.html' %}
 {%load static%}
 {% block content %}
-  <link href="{% static 'css/board.css' %}?ver=1" rel="stylesheet">
+  <link href="{% static 'css/board.css' %}?ver=2" rel="stylesheet">
 {% block staticcss %}{% endblock %}
 
-
+<div style="font-family: NanumBarunPen;">
   <div id="search_table" style="margin-top: 15px">
 
   <div class="region_category">
 
 
-
+<div>
 <form id="tag_search_form" method="POST">
 {% csrf_token %}
 <div class="row">
@@ -77,7 +77,7 @@
         </div>
       </div>
     </div>
-    <button id="search_button" type="submit" class="waves-effect waves-light btn" style="float: right; margin-right: 20px;">검색</button>
+    <button id="search_button" type="submit" class="waves-effect waves-light btn" style="float: right; margin-right: 20px; background-color: white; color: black; border: solid 1.5px #9e9b9b;">검색</button>
   </div>
 </form>
   </div>
@@ -165,36 +165,38 @@ $('#project_all').click(function () {
     }
 })
 </script>
+</div>
 
-
+<div style="margin: 20px 0;">
 <form method="POST" action="{% url 'planningboard:alphabet' %}">
   {% csrf_token %}
-    <button type="submit" id="alphabet" class='sorting btn' style="float: right">가나다순 정렬</button>
+    <button type="submit" id="alphabet" class='sorting btn' style="float: right; margin-right: 5px;">가나다순 정렬</button>
   </form>
   <form method="POST" action="{% url 'planningboard:recent' %}">
   {% csrf_token %}
     <button type="submit" id="recent" class="sorting btn" style="float: right">최신순 정렬</button>
   </form>
+</div>
 
 
-<div class="detail_list_wrapper">
+<div class="detail_list_wrapper" style="margin-top: 70px;">
   <ul>
     {% for detail in detail_list %}
       <li class="card_wrapper">
         <a href="{% url 'planningboard:detail' detail.pk %}">
           <div class="card">
             <div class="card-image">
-              <img class="image" src="{{ detail.image_url }}">
+              <img class="image" src="{{ detail.image_url }}" >
             </div>
             <div class="card-content">
-              <a class="card-title" href="{% url 'planningboard:detail' detail.pk %}">{{ detail.title }}</a>
-              <a class = "card-author" href="{% url 'accounts:myinfo'  detail.author %}"><p>{{ detail.author }}</p></a>
+              <a class="card-title" href="{% url 'planningboard:detail' detail.pk %}" style="text-align: center; font-weight: strong;">{{ detail.title }}</a>
+              <a class = "card-author" href="{% url 'accounts:myinfo'  detail.author %}" style="color: black;"><p>{{ detail.author }}</p></a>
               <p class="card_recruiting_period">{% if detail.remain_days < 0  %}모집마감{% else %}D-{{ detail.remain_days }}{% endif %}</p>
               <p class="card-recruiting_number">모집인원: {{ detail.recruiting_number }}명</p>
             </div>
           </div>
         </a>
-      </>
+      </li>
     {% endfor %}
   </ul>
 </div>
@@ -239,24 +241,24 @@ $('#recent').click(function(e){
 });
 
 </script>
-<a id="create_button" href="{% url 'planningboard:create' %}" class="waves-effect waves-light btn" style="float: right">글쓰기</a>
-<div class="page_display" style="text-align: center;">
+<a id="create_button" href="{% url 'planningboard:create' %}" class="waves-effect waves-light btn" style="float: right;">글쓰기</a>
+<div class="page_display" style="text-align: center; margin-bottom: 30px;">
     {% load mathfilters %}
 
     {% if startPageNum != 1 %}
-        <a href="/board/planning/list?pageNum={{startPageNum | sub:1}}">[이전]</a>
+        <a href="/board/planning/list?pageNum={{startPageNum | sub:1}}" style="color: gray;">[이전]</a>
     {% endif %}
 
     {% for i in bottomPages %}
         {% if i == pageNum %}
-            <a class="active" href="/board/planning/list?pageNum={{ i }}">{{ i }}</a>
+            <a class="active" href="/board/planning/list?pageNum={{ i }}" style="color: gray;">{{ i }}</a>
         {% else %}
-            <a href="/board/planning/list?pageNum={{ i }}">{{ i }}</a>
+            <a href="/board/planning/list?pageNum={{ i }}" style="color: gray;">{{ i }}</a>
         {% endif %}
     {% endfor %}
 
     {% if endPageNum < totalPageCount %}
-        <a href="/board/planning/list?pageNum={{endPageNum | add:1}}">[다음]</a>
+        <a href="/board/planning/list?pageNum={{endPageNum | add:1}}" style="color: gray;">[다음]</a>
     {% endif %}
 </div>
 {% endblock %}

@@ -117,7 +117,7 @@ def apply(request, team_pk):
 def accept(request, pk):
     invite = get_object_or_404(Invite, pk=pk)
     if invite.is_apply:
-        if request.user.profile != invite.sender:
+        if request.user.profile != invite.receiver:
             raise Http404('잘못된 경로입니다.')
         if invite.sender.member_set.filter(team=invite.team).exists():
             raise Http404('이미 가입된 사용자입니다.')
@@ -135,7 +135,7 @@ def accept(request, pk):
 def join(request, pk):
     invite = get_object_or_404(Invite, pk=pk)
     if invite.is_apply:
-        if request.user.profile != invite.sender:
+        if request.user.profile != invite.receiver:
             raise Http404('잘못된 경로입니다.')
         if invite.sender.member_set.filter(team=invite.team).exists():
             raise Http404('이미 가입된 사용자입니다.')

@@ -2,7 +2,6 @@ from django import forms
 from .models import Team, Member, Project
 
 
-
 class TeamForm(forms.ModelForm):
     class Meta:
         model = Team
@@ -23,4 +22,3 @@ class ProjectForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['project_description'].initial = '언어 : \nOS : \n'
-

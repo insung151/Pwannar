@@ -1,5 +1,4 @@
 from django import forms
-
 from .models import (
     Planning,
     Tag_Region,
@@ -7,6 +6,7 @@ from .models import (
     Comment
     )
 from team.models import Team
+
 
 class PlanningCreateForm(forms.ModelForm):
     def __init__(self, profile, *args, **kwargs):
@@ -27,7 +27,9 @@ class PlanningCreateForm(forms.ModelForm):
             'recruiting_number': forms.NumberInput(attrs={'type': 'range', 'min': '0', 'max': '100'})
         }
 
+
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         exclude = ['author', 'detail']
+

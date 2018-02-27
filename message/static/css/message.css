@@ -1,0 +1,9 @@
+.message_content{
+    min-height: 50px;
+}
+
+
+.btn{
+    margin: 3px;
+    background-color: darkgreen;
+}
