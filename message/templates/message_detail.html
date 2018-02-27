@@ -3,49 +3,54 @@
 {% block content %}
   <link href="{% static 'css/message.css' %}?ver=1" rel="stylesheet">
   {% block staticcss %}{% endblock %}
-
-<div class="message_info">
-  {% if request.user.profile == message.receiver %}
-    <div>
-      <p style="display: inline-block;">보낸 사람 :</p>
-      <ul id="sender_dropdown" class="dropdown-content">
-        <li><a href="{% url 'accounts:myinfo' message.sender %}">프로필 보기</a></li>
-        <li><a href="{% url 'message:message_send' message.sender %}">메세지 보내기</a></li>
-      </ul>
-      <a class="dropdown-button" href="#!" data-activates="sender_dropdown" style="display: inline-block; min-width: 150px">{{ message.sender }}</a>
+  <div style="border: solid 7px rgba(0, 0, 0, 0.16); margin:auto; margin-top: 30px; width: 60%;">
+    <div class="message_info" style="background-color: #dfe9df;">
+      {% if request.user.profile == message.receiver %}
+        <div>
+          <p style="display: inline-block; margin-bottom: 0px;">보낸 사람 :</p>
+          <ul id="sender_dropdown" class="dropdown-content">
+            <li><a href="{% url 'accounts:myinfo' message.sender %}">프로필 보기</a></li>
+            <li><a href="{% url 'message:message_send' message.sender %}">메세지 보내기</a></li>
+          </ul>
+          <a class="dropdown-button" href="#!" data-activates="sender_dropdown" style="display: inline-block; min-width: 150px">{{ message.sender }}</a>
+        </div>
+      {% elif request.user.profile == message.sender %}
+        <div>
+          <p style="display: inline-block; margin-bottom: 0px;">받는 사람 :</p>
+          <ul id="recevier_dropdown" class="dropdown-content">
+            <li><a href="{% url 'accounts:myinfo' message.receiver %}">프로필 보기</a></li>
+            <li><a href="{% url 'message:message_send' message.receiver %}">메세지 보내기</a></li>
+          </ul>
+          <a class="dropdown-button" href="#!" data-activates="receiver_dropdown" style="display: inline-block; min-width: 150px">{{ message.receiver }}</a>
+        </div>
+      {% endif %}
+      <p style="margin-bottom: 0px">보낸 시간 : {{ message.send_time|date:"Y.m.d H:i"}}</p><br>
     </div>
-  {% elif request.user.profile == message.sender %}
-    <div>
-      <p style="display: inline-block">받는 사람 :</p>
-      <ul id="recevier_dropdown" class="dropdown-content">
-        <li><a href="{% url 'accounts:myinfo' message.receiver %}">프로필 보기</a></li>
-        <li><a href="{% url 'message:message_send' message.receiver %}">메세지 보내기</a></li>
-      </ul>
-      <a class="dropdown-button" href="#!" data-activates="receiver_dropdown" style="display: inline-block; min-width: 150px">{{ message.receiver }}</a>
+
+
+      <div class="message_content" style="">
+        <pre style="padding-left: 10px">{{ message.content }}</pre>
+        <img style="width: 20%; float: right" src="{% static 'img/message_img.png' %}">
+      </div>
     </div>
-  {% endif %}
-  <p>보낸 시간 : {{ message.send_time|date:"Y.m.d H:i"}}</p><br>
-</div>
+  <div style="text-align: center; margin-top: 20px; margin-bottom: 20px">
+      {% if message.is_invite and request.user.profile == message.receiver%}
+          <a class="btn accept_button" href="{{ message.invite_url }}" style="
+          display:inline-block; background-color: #1d6e21; border: solid 2px #ebe9e9; padding-left: 75px; padding-right: 75px;">수락</a>
+      {% endif %}
+
+      {% if request.user.profile == message.receiver and not message.is_invite %}
+        <a class="btn" href="{% url 'message:message_send' message.sender %}" style="display:inline-block; background-color: #1d6e21; border: solid 2px #ebe9e9; padding-left: 75px; padding-right: 75px;">답장</a>
+      {% endif %}
+
+      <form method="post" action="{% url 'message:message_delete' message.pk %}" style="display: inline-block">
+      {% csrf_token %}
+        <button type="submit" class="btn" style="background-color: #ebe9e9; display: inline-block;
+        border: solid 2.5px #1d6e21; color: black; padding-left: 75px;
+        padding-right: 75px;">삭제</button>
+      </form>
 
 
-  <hr>
-  <div class="message_content">
-    <pre>{{ message.content }}</pre>
+
   </div>
-
-  {% if message.is_invite and request.user.profile == message.receiver%}
-      <a class="btn accept_button center-align" href="{{ message.invite_url }}">수락</a>
-  {% endif %}
-
-  <form method="post" action="{% url 'message:message_delete' message.pk %}" >
-  {% csrf_token %}
-    <button type="submit" class="btn">삭제</button>
-  </form>
-
-
-  {% if request.user.profile == message.receiver and message.invi%}
-    <a href="{% url 'message:message_send' message.sender %}">
-      <button>답장</button>
-    </a>
-  {% endif %}
 {% endblock %}
