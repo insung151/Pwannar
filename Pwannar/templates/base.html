@@ -10,9 +10,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
   {% block staticcss %}{% endblock %}
   <link href="{% static 'css/filter.css' %}" rel="stylesheet">
-  <link href="{% static 'css/fix.css' %}?ver=1.04" rel="stylesheet" />
+  <link href="{% static 'css/fix.css' %}?ver=1.05" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="{% static 'css/header_footer.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/font.css' %}">
+  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
@@ -21,7 +23,7 @@
 
   {% block staticjs %}{% endblock %}
 </head>
-<body>
+<body style="background-color: rgba(90, 90, 90, 0.06);">
   <nav id="nav-fixed">
     <div class="nav-wrapper container">
       <!--mobile-->
@@ -50,8 +52,7 @@
       <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
 
       <!--Desktop-->
-      {# <img id="brand_logo" src="{% static 'images/brand_logo.png' %}"> #}
-      <a href="{% url 'core:mainpage' %}" class="brand-logo" id="brand-logo-fixed"><img id="brand_logo" src="{% static 'images/brand_logo_white.png' %}" style="width: 78%;"></a>
+      <a href="{% url 'core:mainpage' %}" class="brand-logo" id="brand-logo-fixed"><img id="brand_logo" src="{% static 'images/brand_logo_white_flower.png' %}"></a>
       <div id="ul-fixed">
         <ul id="nav-mobile" class="right hide-on-med-and-down">
           {% if user.is_authenticated %}

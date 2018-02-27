@@ -60,16 +60,21 @@ img.image{
 #search_table{
     border-radius: 10px;
     padding: 15px;
-    background-color: #ecf7ff;
+    background-color: white;
+    border: 0.5px solid black;
 }
 
 li.indicator{
-    background-color: #afa2fe !important;
+    background-color: darkgreen !important;
 }
 
 li.tab a{
     font-weight: bold;
-    color: darkblue !important;
+    color: gray;
+}
+
+li.tab a:hover{
+    color: darkgreen !important;
 }
 
 a.card-title{
@@ -82,4 +87,18 @@ a.card-title{
     font-size: large !important;
 }
 
+a.active {
+    color: darkgreen !important;
+}
 
+label {
+    color: black;
+}
+
+button {
+    margin: auto;
+    display: block;
+    width: 20%;
+    background-color: green !important;
+    font-family: NanumBarunPen;
+}

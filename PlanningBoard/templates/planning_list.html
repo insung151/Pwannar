@@ -2,11 +2,14 @@
 {% extends 'base.html' %}
 {%load static%}
 {% block content %}
-  <link href="{% static 'css/board.css' %}?ver=2" rel="stylesheet">
-{% block staticcss %}{% endblock %}
 
-<div style="font-family: NanumBarunPen;">
-  <div id="search_table" style="margin-top: 15px">
+{% block staticcss %}
+  <link href="{% static 'css/board.css' %}?ver=1.02" rel="stylesheet">
+{% endblock %}
+
+{% block staticjs %}
+<script src="{% static 'js/planning_list.js' %}"></script>
+{% endblock %}  <div id="search_table" style="margin-top: 15px">
 
   <div class="region_category">
 
@@ -14,12 +17,12 @@
 <div>
 <form id="tag_search_form" method="POST">
 {% csrf_token %}
-<div class="row">
+<div class="row" style="margin-bottom:0;">
     <div class="col s12">
       <ul class="tabs">
-        <li class="tab col s4" ><a class ='activate' href="#local">지역</a></li>
-        <li class="tab col s4"><a href="#language">언어</a></li>
-        <li class="tab col s4"><a href="#project">프로젝트</a></li>
+        <li class="tab col s4" ><a class ='activate' href="#local" style="color: gray;">지역</a></li>
+        <li class="tab col s4"><a href="#language" style="color: gray;">언어</a></li>
+        <li class="tab col s4"><a href="#project" style="color: gray;">프로젝트</a></li>
       </ul>
     </div>
     <div id="local" class="col s12">
@@ -77,7 +80,9 @@
         </div>
       </div>
     </div>
-    <button id="search_button" type="submit" class="waves-effect waves-light btn" style="float: right; margin-right: 20px; background-color: white; color: black; border: solid 1.5px #9e9b9b;">검색</button>
+
+    <button id="search_button" type="submit" class="waves-effect waves-light btn" style="float: right; margin-right: 20px; width:10%;">검색</button>
+
   </div>
 </form>
   </div>
@@ -167,73 +172,55 @@ $('#project_all').click(function () {
 </script>
 </div>
 
-<div style="margin: 20px 0;">
-<form method="POST" action="{% url 'planningboard:alphabet' %}">
+<form method="POST" style="float: right; margin-top:10px">
   {% csrf_token %}
-    <button type="submit" id="alphabet" class='sorting btn' style="float: right; margin-right: 5px;">가나다순 정렬</button>
-  </form>
-  <form method="POST" action="{% url 'planningboard:recent' %}">
-  {% csrf_token %}
-    <button type="submit" id="recent" class="sorting btn" style="float: right">최신순 정렬</button>
-  </form>
-</div>
+  <input class="with-gap activate" name="group1" type="radio" id="recent"/>
+  <label for="recent">최신순 정렬</label>
 
 
-<div class="detail_list_wrapper" style="margin-top: 70px;">
-  <ul>
-    {% for detail in detail_list %}
-      <li class="card_wrapper">
-        <a href="{% url 'planningboard:detail' detail.pk %}">
-          <div class="card">
-            <div class="card-image">
-              <img class="image" src="{{ detail.image_url }}" >
-            </div>
-            <div class="card-content">
-              <a class="card-title" href="{% url 'planningboard:detail' detail.pk %}" style="text-align: center; font-weight: strong;">{{ detail.title }}</a>
-              <a class = "card-author" href="{% url 'accounts:myinfo'  detail.author %}" style="color: black;"><p>{{ detail.author }}</p></a>
-              <p class="card_recruiting_period">{% if detail.remain_days < 0  %}모집마감{% else %}D-{{ detail.remain_days }}{% endif %}</p>
-              <p class="card-recruiting_number">모집인원: {{ detail.recruiting_number }}명</p>
-            </div>
-          </div>
-        </a>
-      </li>
-    {% endfor %}
-  </ul>
-</div>
+  <input class="with-gap" name="group1" type="radio" id="alphabet"/>
+  <label for="alphabet">가나다순 정렬</label>
+
+</form>
 
 <script>
-
-  var details = document.getElementsByClassName("collection-item avatar");
+$('#recent').click()
+$('#recent').click(function(){
+  var details = document.getElementsByClassName("card_wrapper");
   var selected_detail_list = [];
+
   for(var i=0; i < details.length; i++){
-    selected_detail_list.push(details[i].id);
+    selected_detail_list.push(details[i].id) ;
   }
+
   var data = {selected_detail_list: selected_detail_list};
 
-$('#alphabet').click(function(e){
-  e.preventDefault();
-  alert('알파벳!');
-
-    var url = "{% url 'planningboard:alphabet' %}";
+  var url = "{% url 'planningboard:recent' %}";
   $.post(url, data)
     .done(
     function(r){
-      $('ul.collection').replaceWith(r)
+      $('div.detail_list_wrapper > ul').replaceWith(r)
     })
     .fail(function(){
       alert('Error!')
     })
 });
 
-$('#recent').click(function(e){
-  e.preventDefault();
-  alert('최신순!');
+$('#alphabet').click(function(){
+  var details = document.getElementsByClassName("card_wrapper");
+  var selected_detail_list = [];
 
-  var url = "{% url 'planningboard:recent' %}";
+  for(var i=0; i < details.length; i++){
+    selected_detail_list.push(details[i].id) ;
+  }
+
+  var data = {selected_detail_list: selected_detail_list};
+
+  var url = "{% url 'planningboard:alphabet' %}";
   $.post(url, data)
     .done(
     function(r){
-      $('ul.collection').replaceWith(r)
+      $('div.detail_list_wrapper > ul').replaceWith(r)
     })
     .fail(function(){
       alert('Error!')
@@ -241,8 +228,14 @@ $('#recent').click(function(e){
 });
 
 </script>
-<a id="create_button" href="{% url 'planningboard:create' %}" class="waves-effect waves-light btn" style="float: right;">글쓰기</a>
-<div class="page_display" style="text-align: center; margin-bottom: 30px;">
+
+<div class="detail_list_wrapper">
+    {% include 'detail_list.html' %}
+</div>
+
+<a id="create_button" href="{% url 'planningboard:create' %}" class="waves-effect waves-light btn" style="float: right">글쓰기</a>
+<div class="page_display" style="text-align: center;">
+
     {% load mathfilters %}
 
     {% if startPageNum != 1 %}

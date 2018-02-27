@@ -83,3 +83,7 @@
     background-color: green;
     font-family: NanumBarunPen;
 }
+
+.btn:hover {
+    background-color: #4fa0db;
+}
