@@ -6,9 +6,9 @@
           <div class="card-image">
             <img class="image" src="{{ detail.image_url }}">
           </div>
-          <div class="card-content">
-            <a class="card-title" href="{% url 'planningboard:detail' detail.pk %}">{{ detail.title }}</a>
-            <a class = "card-author" href="{% url 'accounts:myinfo'  detail.author %}"><p>{{ detail.author }}</p></a>
+          <div class="card-content" style="font-family: NanumBarunPen;">
+            <a class="card-title" href="{% url 'planningboard:detail' detail.pk %}" style="text-align: center;">{{ detail.title }}</a>
+            <a class = "card-author" href="{% url 'accounts:myinfo'  detail.author %}" style="color: black;">{{ detail.author }}</a>
             <p class="card_recruiting_period">{% if detail.remain_days < 0  %}모집마감{% else %}D-{{ detail.remain_days }}{% endif %}</p>
             <p class="card-recruiting_number">모집인원: {{ detail.recruiting_number }}명</p>
           </div>

@@ -1,0 +1,19 @@
+<ul>
+  {% for blog in blog_list %}
+    <li id="{{blog.pk}}" class="card_wrapper">
+      <a href="{% url 'ClubBoard:blog_detail' blog.pk %}">
+        <div class="card">
+          <div class="card-image">
+            <img class="image" src="{{ blog.image_url }}">
+          </div>
+          <div class="card-content" style="font-family: NanumBarunPen;">
+            <a class="card-title" href="{% url 'ClubBoard:blog_detail' blog.pk %}" style="text-align: center;">{{ blog.title }}</a>
+            <a class = "card-author" href="{% url 'accounts:myinfo'  blog.author %}" style="color: black;">{{ blog.author }}</a>
+            {# <p class="card_recruiting_period">{% if blog.remain_days < 0  %}모집마감{% else %}D-{{ blog.remain_days }}{% endif %}</p> #}
+            <p class="card-recruiting_number">모집인원: {{ blog.recruiting_number }}명</p>
+          </div>
+        </div>
+      </a>
+    </li>
+  {% endfor %}
+</ul>

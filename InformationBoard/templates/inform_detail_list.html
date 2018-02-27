@@ -1,0 +1,19 @@
+<ul>
+  {% for article in inform_list %}
+    <li id="{{article.pk}}" class="card_wrapper">
+      <a href="{% url 'InformationBoard:inform_detail' article.pk %}">
+        <div class="card">
+          <div class="card-image">
+            <img class="image" src="{{ article.image_url }}">
+          </div>
+          <div class="card-content" style="font-family: NanumBarunPen;">
+            <a class="card-title" href="{% url 'InformationBoard:inform_detail' article.pk %}" style="text-align: center;">{{ article.title }}</a>
+            <a class = "card-author" href="{% url 'accounts:myinfo'  article.author %}" style="color: black;">{{ article.author }}</a>
+            <p class="card_recruiting_period">{% if article.remain_days < 0  %}모집마감{% else %}D-{{ article.remain_days }}{% endif %}</p>
+            <p class="card-recruiting_number">모집인원: {{ article.recruiting_number }}명</p>
+          </div>
+        </div>
+      </a>
+    </li>
+  {% endfor %}
+</ul>
